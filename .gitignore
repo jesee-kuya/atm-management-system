@@ -1,1 +1,4 @@
 src/main.o
+atm
+src/system.o
+src/auth.o
