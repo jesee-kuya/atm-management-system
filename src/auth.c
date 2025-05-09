@@ -26,3 +26,20 @@ void loginMenu(char a[50], char pass[50]) {
     // Restore terminal
     tcsetattr(fileno(stdin), TCSANOW, &oflags);
 }
+
+int getUser(struct User *u) {
+    FILE *fp = fopen(USERS, "r");
+    if (!fp) return 0;
+
+    struct User temp;
+    while (fscanf(fp, "%d %49s %49s", &temp.id, temp.name, temp.password) != EOF) {
+        if (strcmp(temp.name, u->name) == 0) {
+            *u = temp;
+            fclose(fp);
+            return 1;
+        }
+    }
+    fclose(fp);
+    return 0;
+}
+
