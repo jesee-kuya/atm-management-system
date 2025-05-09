@@ -165,3 +165,38 @@ void checkAllAccounts(struct User u)
     success(u);
 }
 
+void updateAccount(struct User u) {
+    int accNumber;
+    printf("Enter account number to update: ");
+    scanf("%d", &accNumber);
+
+    FILE *pf = fopen(RECORDS, "r");
+    FILE *tmp = fopen("temp.txt", "w");
+    struct Record r;
+    char user[50];
+    int found = 0;
+
+    while (getAccountFromFile(pf, user, &r)) {
+        if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
+            found = 1;
+            printf("Enter new country (current: %s): ", r.country);
+            scanf("%99s", r.country);
+            printf("Enter new phone (current: %d): ", r.phone);
+            scanf("%d", &r.phone);
+        }
+        saveAccountToFile(tmp, &(struct User){.id = r.userId}, &r);
+    }
+    fclose(pf);
+    fclose(tmp);
+
+    if (found) {
+        remove(RECORDS);
+        rename("temp.txt", RECORDS);
+        printf("Account updated.\n");
+    } else {
+        remove("temp.txt");
+        printf("Account not found.\n");
+    }
+    stayOrReturn(!found, updateAccount, u);
+}
+
