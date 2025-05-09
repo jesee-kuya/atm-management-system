@@ -164,3 +164,4 @@ void checkAllAccounts(struct User u)
     fclose(pf);
     success(u);
 }
+
