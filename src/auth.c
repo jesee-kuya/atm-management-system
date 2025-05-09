@@ -72,3 +72,28 @@ void registerMenu(char a[50], char pass[50]) {
     strcpy(pass, newUser.password);
     printf("\n\t\t\t\tRegistration successful!\n");
 }
+
+const char *getPassword(struct User u)
+{
+    FILE *fp;
+    struct User userChecker;
+
+    if ((fp = fopen("./data/users.txt", "r")) == NULL)
+    {
+        printf("Error! opening file");
+        exit(1);
+    }
+
+    while (fscanf(fp, "%s %s", userChecker.name, userChecker.password) != EOF)
+    {
+        if (strcmp(userChecker.name, u.name) == 0)
+        {
+            fclose(fp);
+            char *buff = userChecker.password;
+            return buff;
+        }
+    }
+
+    fclose(fp);
+    return "no user found";
+}
