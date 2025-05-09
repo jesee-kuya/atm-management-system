@@ -43,3 +43,32 @@ int getUser(struct User *u) {
     return 0;
 }
 
+void registerMenu(char a[50], char pass[50]) {
+    struct User newUser = {0};
+    FILE *fp = fopen(USERS, "r");
+    
+    // Find max ID
+    while (fp && fscanf(fp, "%d %*s %*s", &newUser.id) != EOF) {
+        if (newUser.id > newUser.id) newUser.id = newUser.id;
+    }
+    newUser.id++;
+    if (fp) fclose(fp);
+
+    system("clear");
+    printf("\n\n\t\t\t\tEnter username: ");
+    scanf("%49s", newUser.name);
+    printf("\n\t\t\t\tEnter password: ");
+    scanf("%49s", newUser.password);
+
+    fp = fopen(USERS, "a");
+    if (!fp) {
+        perror("Failed to open users file");
+        exit(1);
+    }
+    fprintf(fp, "%d %s %s\n", newUser.id, newUser.name, newUser.password);
+    fclose(fp);
+
+    strcpy(a, newUser.name);
+    strcpy(pass, newUser.password);
+    printf("\n\t\t\t\tRegistration successful!\n");
+}
