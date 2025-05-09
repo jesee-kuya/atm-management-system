@@ -200,3 +200,25 @@ void updateAccount(struct User u) {
     stayOrReturn(!found, updateAccount, u);
 }
 
+void checkAccountDetails(struct User u) {
+    int accNumber;
+    printf("Enter account number: ");
+    scanf("%d", &accNumber);
+
+    FILE *pf = fopen(RECORDS, "r");
+    struct Record r;
+    char user[50];
+    int found = 0;
+
+    while (getAccountFromFile(pf, user, &r)) {
+        if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
+            found = 1;
+            printf("\nAccount Number: %d\nCountry: %s\nPhone: %d\nAmount: $%.2f\nType: %s\n",
+                   r.accountNbr, r.country, r.phone, r.amount, r.accountType);
+            break;
+        }
+    }
+    fclose(pf);
+    stayOrReturn(!found, checkAccountDetails, u);
+}
+
