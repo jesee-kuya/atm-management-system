@@ -222,3 +222,75 @@ void checkAccountDetails(struct User u) {
     stayOrReturn(!found, checkAccountDetails, u);
 }
 
+void makeTransaction(struct User u) {
+    int choice;
+    double amount;
+    int accNumber;
+    printf("Enter account number: ");
+    scanf("%d", &accNumber);
+    printf("1. Deposit\n2. Withdraw\nChoose: ");
+    scanf("%d", &choice);
+    printf("Enter amount: ");
+    scanf("%lf", &amount);
+
+    FILE *pf = fopen(RECORDS, "r");
+    FILE *tmp = fopen("temp.txt", "w");
+    struct Record r;
+    char user[50];
+    int found = 0;
+
+    while (getAccountFromFile(pf, user, &r)) {
+        if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
+            found = 1;
+            if (choice == 1) r.amount += amount;
+            else if (r.amount >= amount) r.amount -= amount;
+            else {
+                printf("Insufficient funds.\n");
+                fclose(pf); fclose(tmp); remove("temp.txt");
+                stayOrReturn(0, makeTransaction, u);
+                return;
+            }
+        }
+        saveAccountToFile(tmp, &u, &r);
+    }
+    fclose(pf); fclose(tmp);
+
+    if (found) {
+        remove(RECORDS);
+        rename("temp.txt", RECORDS);
+        printf("Transaction successful.\n");
+    } else {
+        remove("temp.txt");
+        printf("Account not found.\n");
+    }
+    stayOrReturn(!found, makeTransaction, u);
+}
+
+void removeAccount(struct User u) {
+    int accNumber;
+    printf("Enter account number to delete: ");
+    scanf("%d", &accNumber);
+
+    FILE *pf = fopen(RECORDS, "r");
+    FILE *tmp = fopen("temp.txt", "w");
+    struct Record r;
+    char user[50];
+    int found = 0;
+
+    while (getAccountFromFile(pf, user, &r)) {
+        if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) found = 1;
+        else saveAccountToFile(tmp, &u, &r);
+    }
+    fclose(pf); fclose(tmp);
+
+    if (found) {
+        remove(RECORDS);
+        rename("temp.txt", RECORDS);
+        printf("Account removed.\n");
+    } else {
+        remove("temp.txt");
+        printf("Account not found.\n");
+    }
+    stayOrReturn(!found, removeAccount, u);
+}
+
