@@ -104,8 +104,17 @@ void createNewAcc(struct User u) {
 noAccount:
     system("clear");
     printf("\t\t\t===== New record =====\n");
-    printf("\nEnter today's date(mm/dd/yyyy):");
-    scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
+    int validDate = 0;
+    do {
+        printf("\nEnter today's date(mm/dd/yyyy):");
+        if (scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year) != 3) {
+            while (getchar() != '\n'); // Clear invalid input
+            printf("Invalid date format!\n");
+            continue;
+        }
+        validDate = isValidDate(r.deposit.month, r.deposit.day, r.deposit.year);
+        if (!validDate) printf("Invalid date values!\n");
+    } while (!validDate);
     printf("\nEnter the account number:");
     scanf("%d", &r.accountNbr);
 
@@ -126,12 +135,27 @@ noAccount:
 
     printf("\nEnter the country:");
     scanf("%99s", r.country);
-    printf("\nEnter the phone number:");
-    scanf("%d", &r.phone);
+    // Phone number input:
+    char phoneStr[20];
+    do {
+        printf("\nEnter the phone number: ");
+        scanf("%19s", phoneStr);
+        if (!isValidPhone(phoneStr)) {
+            printf("Invalid phone number! Use digits only (8-15 chars)\n");
+        }
+    } while (!isValidPhone(phoneStr));
+    r.phone = atoi(phoneStr); // Or store as string
     printf("\nEnter amount to deposit: $");
     scanf("%lf", &r.amount);
     printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01(for 1 year)\n\t-> fixed02(for 2 years)\n\t-> fixed03(for 3 years)\n\n\tEnter your choice:");
-    scanf("%9s", r.accountType);
+    do {
+        printf("\nEnter your choice:");
+        scanf("%9s", r.accountType);
+        if (!isValidAccountType(r.accountType)) {
+            printf("Invalid account type! Choose from: saving, current, fixed01-03\n");
+        }
+    } while (!isValidAccountType(r.accountType));
+
 
     r.userId = u.id;
     saveAccountToFile(pf, &u, &r);
@@ -349,8 +373,15 @@ void transferOwner(struct User u) {
     char newUser[50];
     printf("Enter account number: ");
     scanf("%d", &accNumber);
-    printf("Enter new owner's username: ");
-    scanf("%49s", newUser);
+    do {
+        printf("Enter new owner's username: ");
+        scanf("%49s", newUser);
+        if (strcmp(newUser, u.name) == 0) {
+            printf("Cannot transfer to yourself!\n");
+        } else if (!isValidName(newUser)) {
+            printf("Invalid username format!\n");
+        }
+    } while (strcmp(newUser, u.name) == 0 || !isValidName(newUser));
 
     struct User newOwner = {0};
     strcpy(newOwner.name, newUser);
