@@ -40,3 +40,11 @@ void checkAccountDetails(struct User u);
 void makeTransaction(struct User u);
 void removeAccount(struct User u);
 void transferOwner(struct User u);
+
+// Validation functions
+int isValidDate(int month, int day, int year);
+int isValidPhone(const char *phone);
+int isValidAmount(double amount);
+int isValidAccountType(const char *type);
+int isValidName(const char *name);
+int isValidCountry(const char *country);
