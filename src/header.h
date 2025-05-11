@@ -1,15 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h> // Added for sleep()
 
-struct Date
-{
+struct Date {
     int month, day, year;
 };
 
-// all fields for each record of an account
-struct Record
-{
+struct Record {
     int id;
     int userId;
     char name[100];
@@ -22,19 +20,18 @@ struct Record
     struct Date withdraw;
 };
 
-struct User
-{
+struct User {
     int id;
     char name[50];
     char password[50];
 };
 
-// authentication functions
+// Authentication functions
 void loginMenu(char a[50], char pass[50]);
 void registerMenu(char a[50], char pass[50]);
-const char *getPassword(struct User u);
+int getUser(struct User *u); // Added prototype
 
-// system function
+// System functions
 void createNewAcc(struct User u);
 void mainMenu(struct User u);
 void checkAllAccounts(struct User u);
