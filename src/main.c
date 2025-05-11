@@ -3,9 +3,9 @@
 void mainMenu(struct User u) {
     int option;
     system("clear");
-    printf("\n\n\t\t\t\t╔════════════════════════════╗");
-    printf("\n\t\t\t\t║           ATM             ║");
-    printf("\n\t\t\t\t╚════════════════════════════╝\n");
+    printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
+    printf("\n\t\t\t\tв•‘           ATM             в•‘");
+    printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
     printf("\n\t\t[1] Create a new account\n");
     printf("\t\t[2] Update account\n");
     printf("\t\t[3] Check account details\n");
@@ -18,7 +18,7 @@ void mainMenu(struct User u) {
     
     while (scanf("%d", &option) != 1 || option < 1 || option > 8) {
         printf("\t\tInvalid input! Enter 1-8: ");
-        while (getchar() != '\n'); // Clear input buffer
+        while (getchar() != '\n');
     }
 
     switch (option) {
@@ -37,9 +37,9 @@ void initMenu(struct User *u) {
     int option;
     char password[50];
     system("clear");
-    printf("\n\n\t\t\t\t╔════════════════════════════╗");
-    printf("\n\t\t\t\t║       Welcome to ATM      ║");
-    printf("\n\t\t\t\t╚════════════════════════════╝\n");
+    printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
+    printf("\n\t\t\t\tв•‘       Welcome to ATM      в•‘");
+    printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
     printf("\n\t\t[1] Login\n\t\t[2] Register\n\t\t[3] Exit\n\t\tChoice: ");
     
     while (scanf("%d", &option) != 1 || option < 1 || option > 3) {
@@ -51,10 +51,10 @@ void initMenu(struct User *u) {
         case 1:
             loginMenu(u->name, password);
             if (getUser(u) && strcmp(password, u->password) == 0) {
-                printf("\n\t\t✅ Login successful!\n");
+                printf("\n\t\tвњ… Login successful!\n");
                 sleep(1);
             } else {
-                printf("\n\t\t❌ Invalid credentials!\n");
+                printf("\n\t\tвќЊ Invalid credentials!\n");
                 exit(EXIT_FAILURE);
             }
             break;
