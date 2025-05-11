@@ -43,9 +43,15 @@ int isValidAccountType(const char *type) {
 }
 
 int isValidName(const char *name) {
-    if (strlen(name) < 3 || strlen(name) > 49) return 0;
+    if (strlen(name) < 3 || strlen(name) > 49) {
+        printf("Invalid name length! Must be between 3 and 49 characters. %s, %ld", name, strlen(name));
+        return 0;
+    }
     for (int i = 0; name[i]; i++) {
-        if (!isalnum(name[i]) && name[i] != '_' && name[i] != '-') return 0;
+        if (!isalnum(name[i]) && name[i] != '_' && name[i] != '-') {
+            printf("Invalid character in name! Use alphanumeric, _ and - only.");
+            return 0;
+        }
     }
     return 1;
 }
