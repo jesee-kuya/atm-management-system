@@ -11,7 +11,12 @@ void loginMenu(char a[50], char pass[50]) {
     printf("\n\t\t\t\tв•‘       User Login           в•‘");
     printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
     printf("\n\t\t\t\tEnter username: ");
-    scanf("%49s", a);
+    do {
+        scanf("%49s", a);
+        if (!isValidName(a)) {
+            printf("Invalid username! Use only alphanumeric, _ and - (3-49 chars): ");
+        }
+    } while (!isValidName(a));
 
     // Disable echo for password
     tcgetattr(STDIN_FILENO, &oldt);
@@ -61,9 +66,23 @@ void registerMenu(char a[50], char pass[50]) {
     printf("\n\t\t\t\tв•‘       Registration        в•‘");
     printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
     printf("\n\t\t\t\tEnter username: ");
-    scanf("%49s", newUser.name);
-    printf("\t\t\t\tEnter password: ");
-    scanf("%49s", newUser.password);
+    do {
+        scanf("%49s", newUser.name);
+        if (!isValidName(a)) {
+            printf("Invalid username! Use only alphanumeric, _ and - (3-49 chars): ");
+        }
+    } while (!isValidName(a));
+
+    char confirmPass[50];
+    do {
+        printf("\t\t\t\tEnter password: ");
+        scanf("%49s", newUser.password);
+        printf("\t\t\t\tConfirm password: ");
+        scanf("%49s", confirmPass);
+        if (strcmp(newUser.password, confirmPass) != 0) {
+            printf("Passwords don't match!\n");
+        }
+    } while (strcmp(newUser.password, confirmPass) != 0);
 
     fp = fopen(USERS, "a");
     if (!fp) {
