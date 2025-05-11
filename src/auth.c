@@ -7,9 +7,9 @@ char *USERS = "./data/users.txt";
 void loginMenu(char a[50], char pass[50]) {
     struct termios oldt, newt;
     system("clear");
-    printf("\n\n\t\t\t\t╔════════════════════════════╗");
-    printf("\n\t\t\t\t║       User Login           ║");
-    printf("\n\t\t\t\t╚════════════════════════════╝\n");
+    printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
+    printf("\n\t\t\t\tв•‘       User Login           в•‘");
+    printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
     printf("\n\t\t\t\tEnter username: ");
     scanf("%49s", a);
 
@@ -48,18 +48,18 @@ void registerMenu(char a[50], char pass[50]) {
 
     // Find max ID
     if (fp) {
-        int currentId;
-        while (fscanf(fp, "%d %*s %*s", &currentId) != EOF) {
-            if (currentId > maxId) maxId = currentId;
+        struct User temp;
+        while (fscanf(fp, "%d %49s %49s", &temp.id, temp.name, temp.password) != EOF) {
+            if (temp.id > maxId) maxId = temp.id;
         }
         fclose(fp);
     }
     newUser.id = maxId + 1;
 
     system("clear");
-    printf("\n\n\t\t\t\t╔════════════════════════════╗");
-    printf("\n\t\t\t\t║       Registration        ║");
-    printf("\n\t\t\t\t╚════════════════════════════╝\n");
+    printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
+    printf("\n\t\t\t\tв•‘       Registration        в•‘");
+    printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
     printf("\n\t\t\t\tEnter username: ");
     scanf("%49s", newUser.name);
     printf("\t\t\t\tEnter password: ");
@@ -75,30 +75,6 @@ void registerMenu(char a[50], char pass[50]) {
 
     strcpy(a, newUser.name);
     strcpy(pass, newUser.password);
-    printf("\n\t\t\t\t✅ Registration successful!\n");
+    printf("\n\t\t\t\tвњ… Registration successful!\n");
     sleep(1);
-}
-const char *getPassword(struct User u)
-{
-    FILE *fp;
-    struct User userChecker;
-
-    if ((fp = fopen("./data/users.txt", "r")) == NULL)
-    {
-        printf("Error! opening file");
-        exit(1);
-    }
-
-    while (fscanf(fp, "%s %s", userChecker.name, userChecker.password) != EOF)
-    {
-        if (strcmp(userChecker.name, u.name) == 0)
-        {
-            fclose(fp);
-            char *buff = userChecker.password;
-            return buff;
-        }
-    }
-
-    fclose(fp);
-    return "no user found";
 }
