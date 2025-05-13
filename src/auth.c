@@ -8,7 +8,7 @@ void loginMenu(char a[50], char pass[50]) {
     struct termios oldt, newt;
     system("clear");
     printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
-    printf("\n\t\t\t\tв•‘       User Login           в•‘");
+    printf("\n\t\t\t\tв•‘                                  User Login                                        в•‘");
     printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
     printf("\n\t\t\t\tEnter username: ");
     do {
