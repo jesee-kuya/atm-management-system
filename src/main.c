@@ -4,7 +4,7 @@ void mainMenu(struct User u) {
     int option;
     system("clear");
     printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
-    printf("\n\t\t\t\tв•‘           ATM                                                                      в•‘");
+    printf("\n\t\t\t\tв•‘                                        ATM                                         в•‘");
     printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
     printf("\n\t\t[1] Create a new account\n");
     printf("\t\t[2] Update account\n");
