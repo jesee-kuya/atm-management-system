@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h> // Added for sleep()
+#include <unistd.h> 
+#include <ctype.h>
 
 struct Date {
     int month, day, year;
