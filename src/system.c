@@ -104,20 +104,40 @@ void createNewAcc(struct User u) {
 noAccount:
     system("clear");
     printf("\t\t\t===== New record =====\n");
+
+    // --- DATE INPUT ---
     int validDate = 0;
+    char dateInput[20];
     do {
-        printf("\nEnter today's date(mm/dd/yyyy):");
-        if (scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year) != 3) {
-            while (getchar() != '\n'); // Clear invalid input
+        printf("\nEnter today's date (mm/dd/yyyy): ");
+        fgets(dateInput, sizeof(dateInput), stdin);
+        if (sscanf(dateInput, "%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year) != 3) {
             printf("Invalid date format!\n");
             continue;
         }
         validDate = isValidDate(r.deposit.month, r.deposit.day, r.deposit.year);
         if (!validDate) printf("Invalid date values!\n");
     } while (!validDate);
-    printf("\nEnter the account number:");
-    scanf("%d", &r.accountNbr);
 
+    // --- ACCOUNT NUMBER ---
+    char accInput[20];
+    while (1) {
+        printf("\nEnter the account number: ");
+        fgets(accInput, sizeof(accInput), stdin);
+        accInput[strcspn(accInput, "\n")] = 0;
+        if (strlen(accInput) == 0 || strspn(accInput, "0123456789") != strlen(accInput)) {
+            printf("Invalid account number! Must be digits only.\n");
+            continue;
+        }
+        r.accountNbr = atoi(accInput);
+        if (r.accountNbr <= 0) {
+            printf("Account number must be positive.\n");
+            continue;
+        }
+        break;
+    }
+
+    // --- CHECK DUPLICATE ACCOUNT ---
     rewind(pf);
     int duplicateFound = 0;
     while (getAccountFromFile(pf, userName, &cr)) {
@@ -133,29 +153,44 @@ noAccount:
         goto noAccount;
     }
 
-    printf("\nEnter the country:");
-    scanf("%99s", r.country);
-    // Phone number input:
+    // --- COUNTRY ---
+    printf("\nEnter the country: ");
+    fgets(r.country, sizeof(r.country), stdin);
+    r.country[strcspn(r.country, "\n")] = 0;
+
+    // --- PHONE ---
     char phoneStr[20];
     do {
         printf("\nEnter the phone number: ");
-        scanf("%19s", phoneStr);
+        fgets(phoneStr, sizeof(phoneStr), stdin);
+        phoneStr[strcspn(phoneStr, "\n")] = 0;
         if (!isValidPhone(phoneStr)) {
-            printf("Invalid phone number! Use digits only (8-15 chars)\n");
+            printf("Invalid phone number! Use digits only (8–15 chars)\n");
         }
     } while (!isValidPhone(phoneStr));
-    r.phone = atoi(phoneStr); // Or store as string
-    printf("\nEnter amount to deposit: $");
-    scanf("%lf", &r.amount);
-    printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01(for 1 year)\n\t-> fixed02(for 2 years)\n\t-> fixed03(for 3 years)\n\n\tEnter your choice:");
+    r.phone = atoi(phoneStr);
+
+    // --- AMOUNT ---
+    char amountInput[30];
+    while (1) {
+        printf("\nEnter amount to deposit: $");
+        fgets(amountInput, sizeof(amountInput), stdin);
+        if (sscanf(amountInput, "%lf", &r.amount) != 1 || r.amount <= 0) {
+            printf("Invalid amount! Enter a positive number.\n");
+            continue;
+        }
+        break;
+    }
+
+    // --- ACCOUNT TYPE ---
     do {
-        printf("\nEnter your choice:");
-        scanf("%9s", r.accountType);
+        printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01 (1 yr)\n\t-> fixed02 (2 yrs)\n\t-> fixed03 (3 yrs)\n\tEnter your choice: ");
+        fgets(r.accountType, sizeof(r.accountType), stdin);
+        r.accountType[strcspn(r.accountType, "\n")] = 0;
         if (!isValidAccountType(r.accountType)) {
-            printf("Invalid account type! Choose from: saving, current, fixed01-03\n");
+            printf("Invalid account type! Choose from: saving, current, fixed01–fixed03\n");
         }
     } while (!isValidAccountType(r.accountType));
-
 
     r.userId = u.id;
     saveAccountToFile(pf, &u, &r);
