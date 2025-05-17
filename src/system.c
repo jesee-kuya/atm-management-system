@@ -37,13 +37,15 @@ void saveAccountToFile(FILE *ptr, struct User *u, struct Record *r) {
 }
 
 void stayOrReturn(int notGood, void f(struct User u), struct User u) {
+    char input[10];
     int option;
     if (notGood == 0) {
         system("clear");
         printf("\n✖ Record not found!!\n");
     invalid:
         printf("\nEnter 0 to try again, 1 to return to main menu and 2 to exit:");
-        scanf("%d", &option);
+        fgets(input, sizeof(input), stdin);
+        option = atoi(input);
         if (option == 0)
             f(u);
         else if (option == 1)
@@ -56,7 +58,8 @@ void stayOrReturn(int notGood, void f(struct User u), struct User u) {
         }
     } else {
         printf("\nEnter 1 to go to the main menu and 0 to exit:");
-        scanf("%d", &option);
+        fgets(input, sizeof(input), stdin);
+        option = atoi(input);
     }
     if (option == 1) {
         system("clear");
@@ -68,11 +71,13 @@ void stayOrReturn(int notGood, void f(struct User u), struct User u) {
 }
 
 void success(struct User u) {
+    char input[10];
     int option;
     printf("\n✔ Success!\n\n");
 invalid:
     printf("Enter 1 to go to the main menu and 0 to exit!\n");
-    scanf("%d", &option);
+    fgets(input, sizeof(input), stdin);
+    option = atoi(input);
     system("clear");
     if (option == 1) {
         mainMenu(u);
@@ -228,9 +233,11 @@ void checkAllAccounts(struct User u) {
 }
 
 void updateAccount(struct User u) {
+    char accInput[20];
     int accNumber;
     printf("Enter account number to update: ");
-    scanf("%d", &accNumber);
+    fgets(accInput, sizeof(accInput), stdin);
+    accNumber = atoi(accInput);
 
     FILE *pf = fopen(RECORDS, "r");
     if (!pf) {
@@ -253,8 +260,16 @@ void updateAccount(struct User u) {
             found = 1;
             printf("Enter new country (current: %s): ", r.country);
             scanf("%99s", r.country);
-            printf("Enter new phone (current: %d): ", r.phone);
-            scanf("%d", &r.phone);
+            char phoneStr[20];
+            do {
+                printf("Enter new phone (current: %d): ", r.phone);
+                fgets(phoneStr, sizeof(phoneStr), stdin);
+                phoneStr[strcspn(phoneStr, "\n")] = 0;
+                if (!isValidPhone(phoneStr)) {
+                    printf("Invalid phone number! Use digits only (8–15 chars)\n");
+                }
+            } while (!isValidPhone(phoneStr));
+            r.phone = atoi(phoneStr);
         }
         saveAccountToFile(tmp, &(struct User){.id = r.userId}, &r);
     }
@@ -273,9 +288,11 @@ void updateAccount(struct User u) {
 }
 
 void checkAccountDetails(struct User u) {
+    char accInput[20];
     int accNumber;
     printf("Enter account number: ");
-    scanf("%d", &accNumber);
+    fgets(accInput, sizeof(accInput), stdin);
+    accNumber = atoi(accInput);
 
     FILE *pf = fopen(RECORDS, "r");
     if (!pf) {
@@ -300,15 +317,21 @@ void checkAccountDetails(struct User u) {
 }
 
 void makeTransaction(struct User u) {
-    int choice;
+    char accInput[20], choiceInput[10], amountInput[20];
+    int accNumber, choice;
     double amount;
-    int accNumber;
+
     printf("Enter account number: ");
-    scanf("%d", &accNumber);
+    fgets(accInput, sizeof(accInput), stdin);
+    accNumber = atoi(accInput);
+
     printf("1. Deposit\n2. Withdraw\nChoose: ");
-    scanf("%d", &choice);
+    fgets(choiceInput, sizeof(choiceInput), stdin);
+    choice = atoi(choiceInput);
+
     printf("Enter amount: ");
-    scanf("%lf", &amount);
+    fgets(amountInput, sizeof(amountInput), stdin);
+    amount = atof(amountInput);
 
     FILE *pf = fopen(RECORDS, "r");
     if (!pf) {
@@ -362,9 +385,11 @@ void makeTransaction(struct User u) {
 }
 
 void removeAccount(struct User u) {
+    char accInput[20], newUser[50];
     int accNumber;
-    printf("Enter account number to delete: ");
-    scanf("%d", &accNumber);
+    printf("Enter account number: ");
+    fgets(accInput, sizeof(accInput), stdin);
+    accNumber = atoi(accInput);
 
     FILE *pf = fopen(RECORDS, "r");
     if (!pf) {
@@ -410,7 +435,8 @@ void transferOwner(struct User u) {
     scanf("%d", &accNumber);
     do {
         printf("Enter new owner's username: ");
-        scanf("%49s", newUser);
+        fgets(newUser, sizeof(newUser), stdin);
+        newUser[strcspn(newUser, "\n")] = 0; // Remove newline
         if (strcmp(newUser, u.name) == 0) {
             printf("Cannot transfer to yourself!\n");
         } else if (!isValidName(newUser)) {
