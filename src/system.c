@@ -90,8 +90,11 @@ invalid:
 }
 
 void createNewAcc(struct User u) {
+    ensureRecordsFileExists();
     struct Record r, cr;
     char userName[50];
+
+    // Open or create RECORDS file
     FILE *pf = fopen(RECORDS, "a+");
     if (!pf) {
         perror("Failed to open records file");
@@ -213,8 +216,10 @@ void createNewAcc(struct User u) {
 }
 
 void checkAllAccounts(struct User u) {
+    ensureRecordsFileExists();
     char userName[100];
     struct Record r;
+
     FILE *pf = fopen(RECORDS, "r");
     if (!pf) {
         perror("Failed to open records file");
@@ -242,6 +247,7 @@ void checkAllAccounts(struct User u) {
 }
 
 void updateAccount(struct User u) {
+    ensureRecordsFileExists();
     char accInput[20];
     int accNumber;
     printf("Enter account number to update: ");
@@ -297,6 +303,7 @@ void updateAccount(struct User u) {
 }
 
 void checkAccountDetails(struct User u) {
+    ensureRecordsFileExists();
     char accInput[20];
     int accNumber;
     printf("Enter account number: ");
@@ -326,6 +333,7 @@ void checkAccountDetails(struct User u) {
 }
 
 void makeTransaction(struct User u) {
+    ensureRecordsFileExists();
     char accInput[20], choiceInput[10], amountInput[20];
     int accNumber, choice;
     double amount;
@@ -394,6 +402,7 @@ void makeTransaction(struct User u) {
 }
 
 void removeAccount(struct User u) {
+    ensureRecordsFileExists();
     char accInput[20], newUser[50];
     int accNumber;
     printf("Enter account number: ");
@@ -438,6 +447,7 @@ void removeAccount(struct User u) {
 }
 
 void transferOwner(struct User u) {
+    ensureRecordsFileExists();
     int accNumber;
     char newUser[50];
     printf("Enter account number: ");
@@ -500,4 +510,21 @@ void transferOwner(struct User u) {
         printf("Account not found.\n");
     }
     stayOrReturn(!found, transferOwner, u);
+}
+
+void ensureRecordsFileExists() {
+    struct stat st = {0};
+    if (stat("data", &st) == -1) {
+        if (mkdir("data", 0700) != 0) {
+            perror("Failed to create 'data' directory");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    FILE *fp = fopen(RECORDS, "a");
+    if (!fp) {
+        perror("Failed to create 'records.txt' file");
+        exit(EXIT_FAILURE);
+    }
+    fclose(fp);
 }
