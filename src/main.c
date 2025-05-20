@@ -1,6 +1,7 @@
 #include "header.h"
 
 void mainMenu(struct User u) {
+    system("clear");
     int option;
     char input[10];
 
@@ -81,10 +82,10 @@ void initMenu(struct User *u) {
         printf("\n\t\t[1] Login\n\t\t[2] Register\n\t\t[3] Exit\n\t\tChoice: ");
 
         fgets(input, sizeof(input), stdin);
-        input[strcspn(input, "\n")] = 0;  // remove newline
+        input[strcspn(input, "\n")] = 0;
 
         if (strlen(input) == 0) {
-            continue;  // just Enter was pressed, redisplay menu
+            continue;
         }
 
         int valid = 1;
@@ -98,12 +99,12 @@ void initMenu(struct User *u) {
         if (valid) {
             option = atoi(input);
             if (option >= 1 && option <= 3) {
-                break;  // valid choice
+                break; 
             }
         }
 
         printf("\t\tInvalid input! Enter a number between 1 and 3.\n");
-        sleep(1);  // slight delay before showing menu again
+        sleep(1);
     }
 
     switch (option) {
