@@ -34,7 +34,7 @@ struct User {
 // Authentication functions
 void loginMenu(char a[50], char pass[50]);
 void registerMenu(char a[50], char pass[50]);
-int getUser(struct User *u); // Added prototype
+int getUser(struct User *u);
 
 // System functions
 void createNewAcc(struct User u);
@@ -45,6 +45,7 @@ void checkAccountDetails(struct User u);
 void makeTransaction(struct User u);
 void removeAccount(struct User u);
 void transferOwner(struct User u);
+void ensureRecordsFileExists();
 
 // Validation functions
 int isValidDate(int month, int day, int year);
