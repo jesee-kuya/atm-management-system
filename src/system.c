@@ -445,7 +445,7 @@ void makeTransaction(struct User u) {
         remove("temp.txt");
         printf("Account not found.\n");
     }
-    stayOrReturn(!found, makeTransaction, u);
+    stayOrReturn(1,  makeTransaction, u);
 }
 
 void removeAccount(struct User u) {
@@ -493,7 +493,7 @@ void removeAccount(struct User u) {
         remove("temp.txt");
         printf("Account not found.\n");
     }
-    stayOrReturn(!found, removeAccount, u);
+    stayOrReturn(1, removeAccount, u);
 }
 
 void transferOwner(struct User u) {
