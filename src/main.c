@@ -4,12 +4,13 @@ void mainMenu(struct User u) {
     system("clear");
     int option;
     char input[10];
+    int firstRun = 1;  // Flag to check if it's the first run
 
     while (1) {
         system("clear");
-        printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
-        printf("\n\t\t\t\tв•‘                                        ATM                                         в•‘");
-        printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
+        printf("\n\n\t\t\t\t┌───────────────────────────────────────────────┐");
+        printf("\n\t\t\t\t│                  ATM MENU                    │");
+        printf("\n\t\t\t\t└───────────────────────────────────────────────┘\n");
         printf("\n\t\t[1] Create a new account\n");
         printf("\t\t[2] Update account\n");
         printf("\t\t[3] Check account details\n");
@@ -20,17 +21,17 @@ void mainMenu(struct User u) {
         printf("\t\t[8] Exit\n");
         printf("\n\t\tEnter choice: ");
 
-        // Get input as string
         if (!fgets(input, sizeof(input), stdin)) {
-            // Input error
-            printf("\t\tInput error! Try again.\n");
+            if (!firstRun) {
+                printf("\t\tInput error! Try again.\n");
+                sleep(1);
+            }
+            firstRun = 0;
             continue;
         }
 
-        // Remove newline if present
         input[strcspn(input, "\n")] = 0;
 
-        // Check if input is all digits
         int isNumeric = 1;
         for (int i = 0; input[i]; i++) {
             if (!isdigit(input[i])) {
@@ -39,20 +40,25 @@ void mainMenu(struct User u) {
             }
         }
 
-        if (!isNumeric || strlen(input) == 0) {
-            printf("\t\tInvalid input! Please enter a number from 1 to 8.\n");
-            sleep(1);
+        if (!isNumeric) {
+            if (!firstRun) {
+                printf("\t\tInvalid input! Please enter a number from 1 to 8.\n");
+                sleep(1);
+            }
+            firstRun = 0;
             continue;
         }
 
         option = atoi(input);
         if (option < 1 || option > 8) {
-            printf("\t\tInvalid option! Choose between 1 and 8.\n");
-            sleep(1);
+            if (!firstRun) {
+                printf("\t\tInvalid option! Choose between 1 and 8.\n");
+                sleep(1);
+            }
+            firstRun = 0;
             continue;
         }
 
-        // Valid input, break loop
         break;
     }
 
