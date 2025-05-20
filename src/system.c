@@ -323,13 +323,21 @@ void updateAccount(struct User u) {
 void checkAccountDetails(struct User u) {
     ensureRecordsFileExists();
     system("clear");
-    printf("\t\t\t===== Check account details =====\n");
+    printf("\t\t\t===== Check Account Details =====\n");
 
     char accInput[20];
     int accNumber;
+
     printf("Enter account number: ");
     fgets(accInput, sizeof(accInput), stdin);
+    accInput[strcspn(accInput, "\n")] = 0;
     accNumber = atoi(accInput);
+
+    if (accNumber <= 0) {
+        printf("✖ Invalid account number!\n");
+        stayOrReturn(1, checkAccountDetails, u);
+        return;
+    }
 
     FILE *pf = fopen(RECORDS, "r");
     if (!pf) {
@@ -344,13 +352,27 @@ void checkAccountDetails(struct User u) {
     while (getAccountFromFile(pf, user, &r)) {
         if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
             found = 1;
-            printf("\nAccount Number: %d\nCountry: %s\nPhone: %d\nAmount: $%.2f\nType: %s\n",
-                   r.accountNbr, r.country, r.phone, r.amount, r.accountType);
+            printf("\nAccount Details:\n");
+            printf("─────────────────────────────\n");
+            printf(" Account Number : %d\n", r.accountNbr);
+            printf(" Country        : %s\n", r.country);
+            printf(" Phone          : %d\n", r.phone);
+            printf(" Amount         : $%.2f\n", r.amount);
+            printf(" Account Type   : %s\n", r.accountType);
+            printf(" Date Created   : %02d/%02d/%d\n",
+                   r.deposit.month, r.deposit.day, r.deposit.year);
+            printf("─────────────────────────────\n");
             break;
         }
     }
+
     fclose(pf);
-    stayOrReturn(!found, checkAccountDetails, u);
+
+    if (!found) {
+        printf("✖ Account not found for this user.\n");
+    }
+
+    stayOrReturn(1, checkAccountDetails, u);
 }
 
 void makeTransaction(struct User u) {
