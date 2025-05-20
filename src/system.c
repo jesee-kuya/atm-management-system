@@ -514,7 +514,7 @@ void transferOwner(struct User u) {
     if (found) {
         remove(RECORDS);
         rename("temp.txt", RECORDS);
-        printf("✅ Ownership transferred.\n");
+        printf("Ownership transferred.\n");
     } else {
         remove("temp.txt");
         printf("✖ Account not found.\n");
