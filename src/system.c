@@ -248,8 +248,12 @@ void checkAllAccounts(struct User u) {
 
 void updateAccount(struct User u) {
     ensureRecordsFileExists();
+    system("clear");
+    printf("\t\t\t===== Update account =====\n");
+
     char accInput[20];
     int accNumber;
+
     printf("Enter account number to update: ");
     fgets(accInput, sizeof(accInput), stdin);
     accNumber = atoi(accInput);
@@ -259,6 +263,7 @@ void updateAccount(struct User u) {
         perror("Failed to open records file");
         exit(EXIT_FAILURE);
     }
+
     FILE *tmp = fopen("temp.txt", "w");
     if (!tmp) {
         perror("Failed to open temporary file");
@@ -273,37 +278,53 @@ void updateAccount(struct User u) {
     while (getAccountFromFile(pf, user, &r)) {
         if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
             found = 1;
+
+            // Update country
             printf("Enter new country (current: %s): ", r.country);
-            scanf("%99s", r.country);
+            fgets(r.country, sizeof(r.country), stdin);
+            r.country[strcspn(r.country, "\n")] = 0;
+
+            // Update phone with validation
             char phoneStr[20];
             do {
                 printf("Enter new phone (current: %d): ", r.phone);
                 fgets(phoneStr, sizeof(phoneStr), stdin);
                 phoneStr[strcspn(phoneStr, "\n")] = 0;
+
                 if (!isValidPhone(phoneStr)) {
-                    printf("Invalid phone number! Use digits only (8–15 chars)\n");
+                    printf("You entered: %s\n", phoneStr); // <- Echo phone number first
+                    printf("Invalid phone number! Use digits only (8–15 characters).\n");
                 }
             } while (!isValidPhone(phoneStr));
             r.phone = atoi(phoneStr);
         }
-        saveAccountToFile(tmp, &(struct User){.id = r.userId}, &r);
+
+        // Save record with correct username
+        struct User tempUser = {.id = r.userId};
+        strcpy(tempUser.name, user);
+        saveAccountToFile(tmp, &tempUser, &r);
     }
+
     fclose(pf);
     fclose(tmp);
 
     if (found) {
         remove(RECORDS);
         rename("temp.txt", RECORDS);
-        printf("Account updated.\n");
+        printf("✅ Account updated.\n");
     } else {
         remove("temp.txt");
-        printf("Account not found.\n");
+        printf("✖ Account not found.\n");
     }
-    stayOrReturn(!found, updateAccount, u);
+
+    stayOrReturn(1, updateAccount, u);
 }
 
 void checkAccountDetails(struct User u) {
     ensureRecordsFileExists();
+    system("clear");
+    printf("\t\t\t===== Check account details =====\n");
+
     char accInput[20];
     int accNumber;
     printf("Enter account number: ");
@@ -333,6 +354,10 @@ void checkAccountDetails(struct User u) {
 }
 
 void makeTransaction(struct User u) {
+    ensureRecordsFileExists();
+    system("clear");
+    printf("\t\t\t===== Make a transaction =====\n");
+
     ensureRecordsFileExists();
     char accInput[20], choiceInput[10], amountInput[20];
     int accNumber, choice;
@@ -403,6 +428,9 @@ void makeTransaction(struct User u) {
 
 void removeAccount(struct User u) {
     ensureRecordsFileExists();
+    system("clear");
+    printf("\t\t\t===== Remove account =====\n");
+
     char accInput[20], newUser[50];
     int accNumber;
     printf("Enter account number: ");
@@ -448,18 +476,20 @@ void removeAccount(struct User u) {
 
 void transferOwner(struct User u) {
     ensureRecordsFileExists();
-    
+    system("clear");
+    printf("\t\t\t===== Transfer ownership =====\n");
+
     int accNumber;
     char newUser[50];
 
     printf("Enter account number: ");
     scanf("%d", &accNumber);
-    getchar(); // Clear newline after scanf
+    getchar(); 
 
     do {
         printf("Enter new owner's username: ");
         fgets(newUser, sizeof(newUser), stdin);
-        newUser[strcspn(newUser, "\n")] = 0; // Remove newline
+        newUser[strcspn(newUser, "\n")] = 0;
 
         if (strcmp(newUser, u.name) == 0) {
             printf("Cannot transfer to yourself!\n");
@@ -501,7 +531,7 @@ void transferOwner(struct User u) {
             strcpy(user, newUser);
         }
 
-        // Use a dummy User to pass the updated name
+    
         struct User tempUser;
         tempUser.id = r.userId;
         strcpy(tempUser.name, user);
@@ -520,7 +550,7 @@ void transferOwner(struct User u) {
         printf("✖ Account not found.\n");
     }
 
-    stayOrReturn(!found, transferOwner, u);
+    stayOrReturn(1, transferOwner, u);
 }
 
 void ensureRecordsFileExists() {
