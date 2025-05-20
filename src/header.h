@@ -3,6 +3,10 @@
 #include <string.h>
 #include <unistd.h> 
 #include <ctype.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <termios.h>
+
 
 struct Date {
     int month, day, year;
