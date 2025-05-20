@@ -46,11 +46,11 @@ int getUser(struct User *u) {
     return 0;
 }
 
-
 void registerMenu(char a[50], char pass[50]) {
     struct User newUser = {0};
     int maxId = 0;
 
+    // Try to open existing file to read IDs
     FILE *fp = fopen(USERS, "r");
     if (fp) {
         struct User temp;
@@ -58,7 +58,17 @@ void registerMenu(char a[50], char pass[50]) {
             if (temp.id > maxId) maxId = temp.id;
         }
         fclose(fp);
+    } else {
+        // File doesn't exist, so create data directory and file
+        struct stat st = {0};
+        if (stat("data", &st) == -1) {
+            if (mkdir("data", 0700) != 0) {
+                perror("Failed to create data directory");
+                exit(EXIT_FAILURE);
+            }
+        }
     }
+
     newUser.id = maxId + 1;
 
     system("clear");
@@ -69,7 +79,7 @@ void registerMenu(char a[50], char pass[50]) {
         printf("\n\t\t\t\tEnter username: ");
         scanf("%49s", newUser.name);
         if (!isValidName(newUser.name)) {
-            printf("\t\t\t\tInvalid username! Use only alphanumeric, _ and - (3-49 chars)\n");
+            printf("\t\t\t\tInvalid username! Use only alphanumeric, _ and - (3–49 chars)\n");
         }
     } while (!isValidName(newUser.name));
 
@@ -97,6 +107,7 @@ void registerMenu(char a[50], char pass[50]) {
     strcpy(a, newUser.name);
     strcpy(pass, newUser.password);
 
-    printf("\n\t\t\t\t✅ Registration successful!\n");
+    printf("\n\t\t\t\tRegistration successful!\n");
     sleep(1);
 }
+
