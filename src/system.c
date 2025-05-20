@@ -448,14 +448,19 @@ void removeAccount(struct User u) {
 
 void transferOwner(struct User u) {
     ensureRecordsFileExists();
+    
     int accNumber;
     char newUser[50];
+
     printf("Enter account number: ");
     scanf("%d", &accNumber);
+    getchar(); // Clear newline after scanf
+
     do {
         printf("Enter new owner's username: ");
         fgets(newUser, sizeof(newUser), stdin);
         newUser[strcspn(newUser, "\n")] = 0; // Remove newline
+
         if (strcmp(newUser, u.name) == 0) {
             printf("Cannot transfer to yourself!\n");
         } else if (!isValidName(newUser)) {
@@ -463,6 +468,7 @@ void transferOwner(struct User u) {
         }
     } while (strcmp(newUser, u.name) == 0 || !isValidName(newUser));
 
+    // Check if new user exists
     struct User newOwner = {0};
     strcpy(newOwner.name, newUser);
     if (!getUser(&newOwner)) {
@@ -476,6 +482,7 @@ void transferOwner(struct User u) {
         perror("Failed to open records file");
         exit(EXIT_FAILURE);
     }
+
     FILE *tmp = fopen("temp.txt", "w");
     if (!tmp) {
         perror("Failed to open temporary file");
@@ -493,9 +500,12 @@ void transferOwner(struct User u) {
             r.userId = newOwner.id;
             strcpy(user, newUser);
         }
-        // In transferOwner function, modify line 385:
-        saveAccountToFile(tmp, &(struct User){.id = r.userId, .name = ""}, &r);
-        strncpy((struct User){.id = r.userId}.name, user, 50); // Properly copy the name
+
+        // Use a dummy User to pass the updated name
+        struct User tempUser;
+        tempUser.id = r.userId;
+        strcpy(tempUser.name, user);
+        saveAccountToFile(tmp, &tempUser, &r);
     }
 
     fclose(pf);
@@ -504,11 +514,12 @@ void transferOwner(struct User u) {
     if (found) {
         remove(RECORDS);
         rename("temp.txt", RECORDS);
-        printf("Ownership transferred.\n");
+        printf("✅ Ownership transferred.\n");
     } else {
         remove("temp.txt");
-        printf("Account not found.\n");
+        printf("✖ Account not found.\n");
     }
+
     stayOrReturn(!found, transferOwner, u);
 }
 
