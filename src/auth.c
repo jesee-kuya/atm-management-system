@@ -47,10 +47,11 @@ int getUser(struct User *u) {
 }
 
 void registerMenu(char a[50], char pass[50]) {
+    
     struct User newUser = {0};
     int maxId = 0;
 
-    // Try to open existing file to read IDs
+    // Try to open existing file to read IDs and check usernames
     FILE *fp = fopen(USERS, "r");
     if (fp) {
         struct User temp;
@@ -74,22 +75,58 @@ void registerMenu(char a[50], char pass[50]) {
     system("clear");
     printf("\n\n\t\t\t\tRegistration\n");
 
-    // Username input with validation
+    // Username input with validation and existence check
+    int usernameTaken;
+    char buffer[100];
+
     do {
+        usernameTaken = 0;
         printf("\n\t\t\t\tEnter username: ");
-        scanf("%49s", newUser.name);
-        if (!isValidName(newUser.name)) {
-            printf("\t\t\t\tInvalid username! Use only alphanumeric, _ and - (3–49 chars)\n");
+        if (!fgets(buffer, sizeof(buffer), stdin)) {
+            printf("\t\t\t\tError reading input!\n");
+            continue;
         }
-    } while (!isValidName(newUser.name));
+
+        trimNewline(buffer); 
+
+        if (!isValidName(buffer)) {
+            printf("\t\t\t\tInvalid username! Use only alphanumeric, _ and - (3–49 chars)\n");
+            continue;
+        }
+
+        strncpy(newUser.name, buffer, 50);
+
+        fp = fopen(USERS, "r");
+        if (fp) {
+            struct User temp;
+            while (fscanf(fp, "%d %49s %49s", &temp.id, temp.name, temp.password) != EOF) {
+                if (strcmp(temp.name, newUser.name) == 0) {
+                    usernameTaken = 1;
+                    printf("\t\t\t\tUsername already exists! Try another one.\n");
+                    break;
+                }
+            }
+            fclose(fp);
+        }
+    } while (!isValidName(newUser.name) || usernameTaken);
+
 
     // Password confirmation loop
     char confirmPass[50];
     do {
         printf("\t\t\t\tEnter password: ");
-        scanf("%49s", newUser.password);
+        if (!fgets(newUser.password, sizeof(newUser.password), stdin)) {
+            printf("\t\t\t\tError reading input!\n");
+            continue;
+        }
+        trimNewline(newUser.password);
+
         printf("\t\t\t\tConfirm password: ");
-        scanf("%49s", confirmPass);
+        if (!fgets(confirmPass, sizeof(confirmPass), stdin)) {
+            printf("\t\t\t\tError reading input!\n");
+            continue;
+        }
+        trimNewline(confirmPass);
         if (strcmp(newUser.password, confirmPass) != 0) {
             printf("\t\t\t\tPasswords don't match! Try again.\n");
         }
