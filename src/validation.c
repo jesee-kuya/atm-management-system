@@ -1,6 +1,4 @@
 #include "header.h"
-#include <ctype.h>
-#include <string.h>
 
 int isValidDate(int month, int day, int year) {
     if (year < 1900 || year > 2100) return 0;
@@ -43,13 +41,25 @@ int isValidAccountType(const char *type) {
 }
 
 int isValidName(const char *name) {
-    if (strlen(name) < 3 || strlen(name) > 49) {
-        printf("Invalid name length! Must be between 3 and 49 characters. %s, %ld", name, strlen(name));
+    size_t len = strlen(name);
+    if (len < 3 || len > 49) {
         return 0;
     }
     for (int i = 0; name[i]; i++) {
         if (!isalnum(name[i]) && name[i] != '_' && name[i] != '-') {
-            printf("Invalid character in name! Use alphanumeric, _ and - only.");
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int isValidPassword(const char *password) {
+    size_t len = strlen(password);
+    if (len < 3 || len > 49) {
+        return 0;
+    }
+    for (int i = 0; password[i]; i++) {
+        if (!isalnum(password[i]) && password[i] != '_' && password[i] != '-') {
             return 0;
         }
     }
@@ -57,9 +67,24 @@ int isValidName(const char *name) {
 }
 
 int isValidCountry(const char *country) {
-    if (strlen(country) < 2 || strlen(country) > 49) return 0;
+    size_t len = strlen(country);
+    if (len < 2 || len > 50) {
+        return 0;
+    }
     for (int i = 0; country[i]; i++) {
-        if (!isalpha(country[i]) && country[i] != ' ') return 0;
+        if (isspace(country[i])) {
+            return 0;
+        }
+        if (!(isalpha((unsigned char)country[i]) || country[i] == '-' || country[i] == '\'' || country[i] == '.')) {
+            return 0;
+        }
     }
     return 1;
+}
+
+void trimNewline(char *str) {
+    size_t len = strlen(str);
+    if (len > 0 && str[len - 1] == '\n') {
+        str[len - 1] = '\0';
+    }
 }
