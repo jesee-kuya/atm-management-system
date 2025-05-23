@@ -160,6 +160,8 @@ void createNewAcc(struct User u) {
         // --- ACCOUNT NUMBER ---
         char accInput[20];
         while (1) {
+            system("clear");
+            printf("\t\t\t===== New record =====\n");
             printf("\nEnter the account number: ");
             fgets(accInput, sizeof(accInput), stdin);
             accInput[strcspn(accInput, "\n")] = 0;
@@ -193,18 +195,24 @@ void createNewAcc(struct User u) {
 
         // --- COUNTRY ---
         do {
+            system("clear");
+            printf("\t\t\t===== New record =====\n");
             printf("\nEnter the country: ");
             fgets(r.country, sizeof(r.country), stdin);
             r.country[strcspn(r.country, "\n")] = 0;
             if (!isValidCountry(r.country) || r.country[0] == '\0') {
                 printf("Invalid country name! Use only letters, hyphens, apostrophes, and periods (2–50 chars).\n");
+                sleep(2);
+                continue;
             }
-            
+
         } while (!isValidCountry(r.country));
 
         // --- PHONE ---
         char phoneStr[20];
         do {
+            system("clear");
+            printf("\t\t\t===== New record =====\n");
             printf("\nEnter the phone number: ");
             fgets(phoneStr, sizeof(phoneStr), stdin);
             phoneStr[strcspn(phoneStr, "\n")] = 0;
@@ -217,6 +225,8 @@ void createNewAcc(struct User u) {
         // --- AMOUNT ---
         char amountInput[30];
         while (1) {
+            system("clear");
+            printf("\t\t\t===== New record =====\n");   
             printf("\nEnter amount to deposit: $");
             fgets(amountInput, sizeof(amountInput), stdin);
             if (sscanf(amountInput, "%lf", &r.amount) != 1 || r.amount <= 0) {
@@ -228,6 +238,8 @@ void createNewAcc(struct User u) {
 
         // --- ACCOUNT TYPE ---
         do {
+            system("clear");
+            printf("\t\t\t===== New record =====\n");
             printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01 (1 yr)\n\t-> fixed02 (2 yrs)\n\t-> fixed03 (3 yrs)\n\tEnter your choice: ");
             fgets(r.accountType, sizeof(r.accountType), stdin);
             r.accountType[strcspn(r.accountType, "\n")] = 0;
