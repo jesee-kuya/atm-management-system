@@ -35,6 +35,7 @@ struct User {
 void loginMenu(char a[50], char pass[50]);
 void registerMenu(char a[50], char pass[50]);
 int getUser(struct User *u);
+void ensureUsersFileExists();
 
 // System functions
 void createNewAcc(struct User u);
