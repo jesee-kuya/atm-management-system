@@ -120,20 +120,34 @@ void createNewAcc(struct User u) {
         int validDate = 0;
         char dateInput[20];
 
-        do {
+       do {
             printf("\nEnter today's date (mm/dd/yyyy): ");
             if (!fgets(dateInput, sizeof(dateInput), stdin)) {
                 printf("Input error!\n");
+                clearerr(stdin);  // Clear error state if stdin is broken
                 continue;
             }
 
-            dateInput[strcspn(dateInput, "\n")] = 0; // Remove newline
+            // Check if input was truncated (no newline found)
+            if (strchr(dateInput, '\n') == NULL) {
+                // Flush excess characters from input buffer
+                int c;
+                while ((c = getchar()) != '\n' && c != EOF);
+                printf("Input too long! Please try again.\n");
+                continue;
+            }
 
-            removeWhitespace(dateInput); // Remove all spaces, tabs, etc.
+            removeWhitespace(dateInput);
 
-            // Validate format
-            if (sscanf(dateInput, "%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year) != 3) {
+            int n;  // To track characters parsed by sscanf
+            if (sscanf(dateInput, "%d/%d/%d%n", &r.deposit.month, &r.deposit.day, &r.deposit.year, &n) != 3) {
                 printf("Invalid date format! Use mm/dd/yyyy with no extra characters.\n");
+                continue;
+            }
+
+            // Check if there are leftover characters after the date
+            if (dateInput[n] != '\0') {
+                printf("Invalid date format! Extra characters detected.\n");
                 continue;
             }
 
