@@ -49,32 +49,26 @@ int getUser(struct User *u) {
 
 void registerMenu(char a[50], char pass[50]) {
     ensureUsersFileExists();
-    
+
     struct User newUser = {0};
     int maxId = 0;
+    struct User temp;
 
-    // Try to open existing file to read IDs and check usernames
+    // Determine the next available ID by scanning existing users
     FILE *fp = fopen(USERS, "r");
-    if (fp) {
-        struct User temp;
-        while (fscanf(fp, "%d %49s %49s", &temp.id, temp.name, temp.password) != EOF) {
-            if (temp.id > maxId) maxId = temp.id;
-        }
-        fclose(fp);
-    } else {
-        // File doesn't exist, so create data directory and file
-        struct stat st = {0};
-        if (stat("data", &st) == -1) {
-            if (mkdir("data", 0700) != 0) {
-                perror("Failed to create data directory");
-                exit(EXIT_FAILURE);
-            }
-        }
+    if (!fp) {
+        perror("Failed to open users file");
+        exit(EXIT_FAILURE);
     }
 
-    newUser.id = maxId + 1;
+    while (fscanf(fp, "%d %49s %49s", &temp.id, temp.name, temp.password) == 3) {
+        if (temp.id > maxId) {
+            maxId = temp.id;
+        }
+    }
+    fclose(fp);
 
-    printf("This is the registration menu");
+    newUser.id = maxId + 1;
 
     system("clear");
     printf("\n\n\t\t\t\tRegistration\n");
@@ -91,29 +85,31 @@ void registerMenu(char a[50], char pass[50]) {
             continue;
         }
 
-        trimNewline(buffer); 
+        trimNewline(buffer);
 
         if (!isValidName(buffer)) {
             printf("\t\t\t\tInvalid username! Use only alphanumeric, _ and - (3–49 chars)\n");
             continue;
         }
 
-        strncpy(newUser.name, buffer, 50);
+        strncpy(newUser.name, buffer, sizeof(newUser.name));
+        newUser.name[sizeof(newUser.name) - 1] = '\0';
 
         fp = fopen(USERS, "r");
-        if (fp) {
-            struct User temp;
-            while (fscanf(fp, "%d %49s %49s", &temp.id, temp.name, temp.password) != EOF) {
-                if (strcmp(temp.name, newUser.name) == 0) {
-                    usernameTaken = 1;
-                    printf("\t\t\t\tUsername already exists! Try another one.\n");
-                    break;
-                }
-            }
-            fclose(fp);
+        if (!fp) {
+            perror("Failed to open users file");
+            exit(EXIT_FAILURE);
         }
-    } while (!isValidName(newUser.name) || usernameTaken);
 
+        while (fscanf(fp, "%d %49s %49s", &temp.id, temp.name, temp.password) == 3) {
+            if (strcmp(temp.name, newUser.name) == 0) {
+                usernameTaken = 1;
+                printf("\t\t\t\tUsername already exists! Try another one.\n");
+                break;
+            }
+        }
+        fclose(fp);
+    } while (!isValidName(newUser.name) || usernameTaken);
 
     // Password confirmation loop
     char confirmPass[50];
@@ -131,6 +127,7 @@ void registerMenu(char a[50], char pass[50]) {
             continue;
         }
         trimNewline(confirmPass);
+
         if (strcmp(newUser.password, confirmPass) != 0) {
             printf("\t\t\t\tPasswords don't match! Try again.\n");
         }
@@ -142,6 +139,7 @@ void registerMenu(char a[50], char pass[50]) {
         perror("Failed to open users file");
         exit(EXIT_FAILURE);
     }
+
     fprintf(fp, "%d %s %s\n", newUser.id, newUser.name, newUser.password);
     fclose(fp);
 
