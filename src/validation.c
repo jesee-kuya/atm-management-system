@@ -1,7 +1,7 @@
 #include "header.h"
 
 int isValidDate(int month, int day, int year) {
-    if (year < 1900 || year > 2100) return 0;
+    if (year < 1900 || year > 2025) return 0;
     if (month < 1 || month > 12) return 0;
     if (day < 1 || day > 31) return 0;
     
