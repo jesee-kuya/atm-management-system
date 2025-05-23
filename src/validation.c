@@ -90,12 +90,11 @@ void trimNewline(char *str) {
 }
 
 void removeWhitespace(char *str) {
+    if (str == NULL) return;
     char *src = str, *dst = str;
     while (*src) {
-        if (!isspace((unsigned char)*src)) {
-            *dst++ = *src;
-        }
-        src++;
+        while (*src && !isspace((unsigned char)*src)) *dst++ = *src++;
+        while (*src && isspace((unsigned char)*src)) src++;
     }
     *dst = '\0';
 }
