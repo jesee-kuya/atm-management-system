@@ -89,7 +89,7 @@ void trimNewline(char *str) {
     }
 }
 
-        void removeWhitespace(char *str) {
+void removeWhitespace(char *str) {
     char *src = str, *dst = str;
     while (*src) {
         if (!isspace((unsigned char)*src)) {
