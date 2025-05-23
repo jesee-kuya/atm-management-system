@@ -4,7 +4,7 @@ void mainMenu(struct User u) {
     system("clear");
     int option;
     char input[10];
-    int firstRun = 1;  // Flag to check if it's the first run
+    int firstRun = 1;
 
     while (1) {
         system("clear");
@@ -34,7 +34,7 @@ void mainMenu(struct User u) {
 
         int isNumeric = 1;
         for (int i = 0; input[i]; i++) {
-            if (!isdigit(input[i])) {
+            if (!isdigit((unsigned char)input[i])) {
                 isNumeric = 0;
                 break;
             }
@@ -59,20 +59,23 @@ void mainMenu(struct User u) {
             continue;
         }
 
-        break;
-    }
+        // Handle the option
+        switch (option) {
+            case 1: createNewAcc(u); break;
+            case 2: updateAccount(u); break;
+            case 3: checkAccountDetails(u); break;
+            case 4: checkAllAccounts(u); break;
+            case 5: makeTransaction(u); break;
+            case 6: removeAccount(u); break;
+            case 7: transferOwner(u); break;
+            case 8: exit(0);
+        }
 
-    switch (option) {
-        case 1: createNewAcc(u); break;
-        case 2: updateAccount(u); break;
-        case 3: checkAccountDetails(u); break;
-        case 4: checkAllAccounts(u); break;
-        case 5: makeTransaction(u); break;
-        case 6: removeAccount(u); break;
-        case 7: transferOwner(u); break;
-        case 8: exit(0);
+        // Reset firstRun for error messages
+        firstRun = 1;
     }
 }
+
 
 
 void initMenu(struct User *u) {
