@@ -5,6 +5,7 @@
 char *USERS = "./data/users.txt";
 
 void loginMenu(char a[50], char pass[50]) {
+    ensureUsersFileExists();
     struct termios oldt, newt;
     system("clear");
     printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
@@ -47,6 +48,7 @@ int getUser(struct User *u) {
 }
 
 void registerMenu(char a[50], char pass[50]) {
+    ensureUsersFileExists();
     
     struct User newUser = {0};
     int maxId = 0;
@@ -71,6 +73,8 @@ void registerMenu(char a[50], char pass[50]) {
     }
 
     newUser.id = maxId + 1;
+
+    printf("This is the registration menu");
 
     system("clear");
     printf("\n\n\t\t\t\tRegistration\n");
@@ -148,3 +152,19 @@ void registerMenu(char a[50], char pass[50]) {
     sleep(1);
 }
 
+void ensureUsersFileExists() {
+    struct stat st = {0};
+    if (stat("data", &st) == -1) {
+        if (mkdir("data", 0700) != 0) {
+            perror("Failed to create 'data' directory");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    FILE *fp = fopen(USERS, "a");
+    if (!fp) {
+        perror("Failed to create 'users.txt' file");
+        exit(EXIT_FAILURE);
+    }
+    fclose(fp);
+}
