@@ -88,3 +88,14 @@ void trimNewline(char *str) {
         str[len - 1] = '\0';
     }
 }
+
+        void removeWhitespace(char *str) {
+    char *src = str, *dst = str;
+    while (*src) {
+        if (!isspace((unsigned char)*src)) {
+            *dst++ = *src;
+        }
+        src++;
+    }
+    *dst = '\0';
+}
