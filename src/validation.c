@@ -78,6 +78,10 @@ int isValidCountry(const char *country) {
         if (!(isalpha((unsigned char)country[i]) || country[i] == '-' || country[i] == '\'' || country[i] == '.')) {
             return 0;
         }
+
+        if (country[i] >= '0' && country[i] <= '9') {
+            return 0;
+        }
     }
     return 1;
 }
