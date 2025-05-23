@@ -121,6 +121,8 @@ void createNewAcc(struct User u) {
         char dateInput[20];
 
        do {
+            system("clear");
+            printf("\t\t\t===== New record =====\n");
             printf("\nEnter today's date (mm/dd/yyyy): ");
             if (!fgets(dateInput, sizeof(dateInput), stdin)) {
                 printf("Input error!\n");
@@ -134,6 +136,7 @@ void createNewAcc(struct User u) {
                 int c;
                 while ((c = getchar()) != '\n' && c != EOF);
                 printf("Input too long! Please try again.\n");
+                sleep(2);
                 continue;
             }
 
@@ -142,21 +145,27 @@ void createNewAcc(struct User u) {
             int n;  // To track characters parsed by sscanf
             if (sscanf(dateInput, "%d/%d/%d%n", &r.deposit.month, &r.deposit.day, &r.deposit.year, &n) != 3) {
                 printf("Invalid date format! Use mm/dd/yyyy with no extra characters.\n");
+                sleep(2);
                 continue;
             }
 
             // Check if there are leftover characters after the date
             if (dateInput[n] != '\0') {
                 printf("Invalid date format! Extra characters detected.\n");
+                sleep(2);
                 continue;
             }
 
             validDate = isValidDate(r.deposit.month, r.deposit.day, r.deposit.year);
             if (!validDate) {
                 printf("Invalid date values!\n");
+                sleep(2);
+                continue;
             }
         } while (!validDate);
 
+        int accounErr = 0;
+        int duplicateFound = 0;
         // --- ACCOUNT NUMBER ---
         char accInput[20];
         while (1) {
@@ -167,16 +176,18 @@ void createNewAcc(struct User u) {
             accInput[strcspn(accInput, "\n")] = 0;
             if (strlen(accInput) == 0 || strspn(accInput, "0123456789") != strlen(accInput)) {
                 printf("Invalid account number! Must be digits only.\n");
+                sleep(2);
                 continue;
             }
             r.accountNbr = atoi(accInput);
             if (r.accountNbr <= 0) {
                 printf("Account number must be positive.\n");
+                sleep(2);
                 continue;
             }
             // --- CHECK DUPLICATE ACCOUNT ---
             rewind(pf);
-            int duplicateFound = 0;
+            
             while (getAccountFromFile(pf, userName, &cr)) {
                 if (strcmp(userName, u.name) == 0 && cr.accountNbr == r.accountNbr) {
                     duplicateFound = 1;
@@ -184,12 +195,13 @@ void createNewAcc(struct User u) {
                 }
             }
 
-            if (duplicateFound) {
-                printf("✖ This account already exists for this user. Please try another account number.\n");
-                sleep(2);
-                continue;
-            }
             break;
+        }
+
+         if (duplicateFound) {
+            printf("✖ This account already exists for this user. Please try another account number.\n");
+            sleep(2);
+            continue;
         }
 
 
@@ -218,6 +230,8 @@ void createNewAcc(struct User u) {
             phoneStr[strcspn(phoneStr, "\n")] = 0;
             if (!isValidPhone(phoneStr)) {
                 printf("Invalid phone number! Use digits only (8–15 characters).\n");
+                sleep(2);
+                continue;
             }
         } while (!isValidPhone(phoneStr));
         r.phone = atoi(phoneStr);
@@ -231,6 +245,7 @@ void createNewAcc(struct User u) {
             fgets(amountInput, sizeof(amountInput), stdin);
             if (sscanf(amountInput, "%lf", &r.amount) != 1 || r.amount <= 0) {
                 printf("Invalid amount! Enter a positive number.\n");
+                sleep(2);
                 continue;
             }
             break;
@@ -245,6 +260,8 @@ void createNewAcc(struct User u) {
             r.accountType[strcspn(r.accountType, "\n")] = 0;
             if (!isValidAccountType(r.accountType)) {
                 printf("Invalid account type! Choose from: saving, current, fixed01, fixed02, fixed03\n");
+                sleep(2);
+                continue;
             }
         } while (!isValidAccountType(r.accountType));
 
