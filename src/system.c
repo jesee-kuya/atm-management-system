@@ -119,18 +119,21 @@ void createNewAcc(struct User u) {
         // --- DATE INPUT ---
         int validDate = 0;
         char dateInput[20];
+
         do {
             printf("\nEnter today's date (mm/dd/yyyy): ");
-            fgets(dateInput, sizeof(dateInput), stdin);
-            dateInput[strcspn(dateInput, "\n")] = 0;
-
-            if (strchr(dateInput, ' ') != NULL) {
-                printf("Spaces are not allowed in the date format!\n");
+            if (!fgets(dateInput, sizeof(dateInput), stdin)) {
+                printf("Input error!\n");
                 continue;
             }
 
+            dateInput[strcspn(dateInput, "\n")] = 0; // Remove newline
+
+            removeWhitespace(dateInput); // Remove all spaces, tabs, etc.
+
+            // Validate format
             if (sscanf(dateInput, "%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year) != 3) {
-                printf("Invalid date format! Use mm/dd/yyyy without spaces.\n");
+                printf("Invalid date format! Use mm/dd/yyyy with no extra characters.\n");
                 continue;
             }
 
