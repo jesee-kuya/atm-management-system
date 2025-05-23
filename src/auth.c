@@ -113,13 +113,21 @@ void registerMenu(char a[50], char pass[50]) {
 
     // Password confirmation loop
     char confirmPass[50];
+    char password[50];
     do {
         printf("\t\t\t\tEnter password: ");
-        if (!fgets(newUser.password, sizeof(newUser.password), stdin)) {
+        if (!fgets(password, sizeof(password), stdin)) {
             printf("\t\t\t\tError reading input!\n");
             continue;
         }
-        trimNewline(newUser.password);
+        trimNewline(password);
+
+        if (!isValidPassword(password)) {
+            printf("\t\t\t\tInvalid password! Use only alphanumeric, _ and - (3–49 chars)\n");
+            continue;
+        }
+        strncpy(newUser.password, password, sizeof(newUser.password));
+        newUser.password[sizeof(newUser.password) - 1] = '\0';
 
         printf("\t\t\t\tConfirm password: ");
         if (!fgets(confirmPass, sizeof(confirmPass), stdin)) {
