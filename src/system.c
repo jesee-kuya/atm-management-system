@@ -172,29 +172,35 @@ void createNewAcc(struct User u) {
                 printf("Account number must be positive.\n");
                 continue;
             }
+            // --- CHECK DUPLICATE ACCOUNT ---
+            rewind(pf);
+            int duplicateFound = 0;
+            while (getAccountFromFile(pf, userName, &cr)) {
+                if (strcmp(userName, u.name) == 0 && cr.accountNbr == r.accountNbr) {
+                    duplicateFound = 1;
+                    break;
+                }
+            }
+
+            if (duplicateFound) {
+                printf("✖ This account already exists for this user. Please try another account number.\n");
+                sleep(2);
+                continue;
+            }
             break;
         }
 
-        // --- CHECK DUPLICATE ACCOUNT ---
-        rewind(pf);
-        int duplicateFound = 0;
-        while (getAccountFromFile(pf, userName, &cr)) {
-            if (strcmp(userName, u.name) == 0 && cr.accountNbr == r.accountNbr) {
-                duplicateFound = 1;
-                break;
-            }
-        }
-
-        if (duplicateFound) {
-            printf("✖ This account already exists for this user. Please try another account number.\n");
-            sleep(2);
-            continue;
-        }
 
         // --- COUNTRY ---
-        printf("\nEnter the country: ");
-        fgets(r.country, sizeof(r.country), stdin);
-        r.country[strcspn(r.country, "\n")] = 0;
+        do {
+            printf("\nEnter the country: ");
+            fgets(r.country, sizeof(r.country), stdin);
+            r.country[strcspn(r.country, "\n")] = 0;
+            if (!isValidCountry(r.country) || r.country[0] == '\0') {
+                printf("Invalid country name! Use only letters, hyphens, apostrophes, and periods (2–50 chars).\n");
+            }
+            
+        } while (!isValidCountry(r.country));
 
         // --- PHONE ---
         char phoneStr[20];
