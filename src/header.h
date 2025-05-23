@@ -57,4 +57,4 @@ int isValidName(const char *name);
 int isValidCountry(const char *country);
 void trimNewline(char *str);
 int isValidPassword(const char *password);
-void trimNewline(char *str);
+void removeWhitespace(char *str);
