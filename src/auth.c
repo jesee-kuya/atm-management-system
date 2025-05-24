@@ -121,15 +121,21 @@ void registerMenu(char a[50], char pass[50]) {
     char confirmPass[50];
     char password[50];
     do {
+        system("clear");
+        printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
+        printf("\n\t\t\t\tв•‘                                   Register                                         в•‘");
+        printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
         printf("\t\t\t\tEnter password: ");
         if (!fgets(password, sizeof(password), stdin)) {
             printf("\t\t\t\tError reading input!\n");
+            sleep(2);
             continue;
         }
         trimNewline(password);
 
         if (!isValidPassword(password)) {
             printf("\t\t\t\tInvalid password! Use only alphanumeric, _ and - (3–49 chars)\n");
+            sleep(2);
             continue;
         }
         strncpy(newUser.password, password, sizeof(newUser.password));
@@ -138,12 +144,15 @@ void registerMenu(char a[50], char pass[50]) {
         printf("\t\t\t\tConfirm password: ");
         if (!fgets(confirmPass, sizeof(confirmPass), stdin)) {
             printf("\t\t\t\tError reading input!\n");
+            sleep(2);
             continue;
         }
         trimNewline(confirmPass);
 
         if (strcmp(newUser.password, confirmPass) != 0) {
             printf("\t\t\t\tPasswords don't match! Try again.\n");
+            sleep(2);
+            continue;
         }
     } while (strcmp(newUser.password, confirmPass) != 0);
 
