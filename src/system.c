@@ -252,12 +252,36 @@ void createNewAcc(struct User u) {
         }
 
         // --- ACCOUNT TYPE ---
-        do {
+       do {
             system("clear");
             printf("\t\t\t===== New record =====\n");
-            printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01 (1 yr)\n\t-> fixed02 (2 yrs)\n\t-> fixed03 (3 yrs)\n\tEnter your choice: ");
-            fgets(r.accountType, sizeof(r.accountType), stdin);
-            r.accountType[strcspn(r.accountType, "\n")] = 0;
+            printf("\nChoose the type of account:\n"
+                "\t-> saving\n\t-> current\n\t-> fixed01 (1 yr)\n"
+                "\t-> fixed02 (2 yrs)\n\t-> fixed03 (3 yrs)\n"
+                "\tEnter your choice: ");
+            
+            // Read input
+            if (!fgets(r.accountType, sizeof(r.accountType), stdin)) {
+                printf("Input error!\n");
+                clearerr(stdin);  // Clear error state if stdin fails
+                sleep(2);
+                continue;
+            }
+
+            // Check for input truncation (no newline found)
+            if (strchr(r.accountType, '\n') == NULL) {
+                // Flush excess characters from input buffer
+                int c;
+                while ((c = getchar()) != '\n' && c != EOF);
+                printf("Input too long! Please try again.\n");
+                sleep(2);
+                continue;
+            }
+
+            // Remove ALL whitespace (including newlines/tabs)
+            removeWhitespace(r.accountType);
+
+            // Validate cleaned input
             if (!isValidAccountType(r.accountType)) {
                 printf("Invalid account type! Choose from: saving, current, fixed01, fixed02, fixed03\n");
                 sleep(2);
