@@ -24,7 +24,7 @@ void loginMenu(char a[50], char pass[50]) {
         }
 
         if (!isValidName(a)) {
-            printf("\t\t\t\tInvalid username! Use only alphanumeric, _ and - (3 - 49 chars): ");
+            printf("\t\t\t\tInvalid username! Use only alphanumeric, _ and - (3 - 49 chars)\n");
         }
     } while (!isValidName(a));
 
