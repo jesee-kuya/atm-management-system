@@ -384,16 +384,20 @@ void updateAccount(struct User u) {
 
             // Update phone with validation
             char phoneStr[20];
+            int phone = r.phone;
+            
             do {
                 system("clear");
                 printf("\t\t\t===== Update account =====\n");
-                printf("Enter new phone (current: %d): ", r.phone);
+                printf("Enter new phone (current: %d): ", phone);
                 fgets(phoneStr, sizeof(phoneStr), stdin);
                 phoneStr[strcspn(phoneStr, "\n")] = 0;
 
                 if (!isValidPhone(phoneStr)) {
-                    printf("You entered: %s\n", phoneStr); // <- Echo phone number first
+                    printf("You entered: %s\n", phoneStr);
                     printf("Invalid phone number! Use digits only (8–15 characters).\n");
+                    sleep(2);
+                    continue;
                 }
             } while (!isValidPhone(phoneStr));
             r.phone = atoi(phoneStr);
