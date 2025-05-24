@@ -39,11 +39,12 @@ int accountNumberExists(FILE *ptr, int accountNbr) {
                   temp.accountType) != EOF) {
 
         if (temp.accountNbr == accountNbr) {
-            return 1; // Account number found
+            return 1; 
         }
     }
 
-    return 0; // Not found
+
+    return 0; 
 }
 
 void saveAccountToFile(FILE *ptr, struct User *u, struct Record *r) {
@@ -210,9 +211,15 @@ void createNewAcc(struct User u) {
                 sleep(2);
                 continue;
             }
-            // --- CHECK DUPLICATE ACCOUNT ---
+
             rewind(pf);
-            
+            if (accountNumberExists(pf, r.accountNbr)) {
+                printf("Account number already exists! Please try another.\n");
+                sleep(2);
+                continue;
+            }
+           
+            rewind(pf);
             while (getAccountFromFile(pf, userName, &cr)) {
                 if (strcmp(userName, u.name) == 0 && cr.accountNbr == r.accountNbr) {
                     duplicateFound = 1;
