@@ -364,10 +364,13 @@ void updateAccount(struct User u) {
         if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
             found = 1;
 
+            char country[100];
+            strcpy(country, r.country);
+
             do {
                 system("clear");
                 printf("\t\t\t===== Update account =====\n");
-                printf("Enter new country (current: %s): ", r.country);
+                printf("Enter new country (current: %s): ", country);
                 fgets(r.country, sizeof(r.country), stdin);
                 r.country[strcspn(r.country, "\n")] = 0;
                 if (!isValidCountry(r.country) || r.country[0] == '\0') {
