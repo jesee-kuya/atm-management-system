@@ -364,7 +364,6 @@ void updateAccount(struct User u) {
         if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
             found = 1;
 
-
             do {
                 system("clear");
                 printf("\t\t\t===== Update account =====\n");
@@ -383,6 +382,8 @@ void updateAccount(struct User u) {
             // Update phone with validation
             char phoneStr[20];
             do {
+                system("clear");
+                printf("\t\t\t===== Update account =====\n");
                 printf("Enter new phone (current: %d): ", r.phone);
                 fgets(phoneStr, sizeof(phoneStr), stdin);
                 phoneStr[strcspn(phoneStr, "\n")] = 0;
