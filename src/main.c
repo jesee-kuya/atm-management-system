@@ -8,9 +8,9 @@ void mainMenu(struct User u) {
 
     while (1) {
         system("clear");
-        printf("\n\n\t\t\t\t┌───────────────────────────────────────────────┐");
-        printf("\n\t\t\t\t│                  ATM MENU                    │");
-        printf("\n\t\t\t\t└───────────────────────────────────────────────┘\n");
+        printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
+        printf("\n\t\t\t\tв•‘                                       ATM MENU                                     в•‘");
+        printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
         printf("\n\t\t[1] Create a new account\n");
         printf("\t\t[2] Update account\n");
         printf("\t\t[3] Check account details\n");
