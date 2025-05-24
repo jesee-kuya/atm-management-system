@@ -364,10 +364,21 @@ void updateAccount(struct User u) {
         if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
             found = 1;
 
-            // Update country
-            printf("Enter new country (current: %s): ", r.country);
-            fgets(r.country, sizeof(r.country), stdin);
-            r.country[strcspn(r.country, "\n")] = 0;
+
+            do {
+                system("clear");
+                printf("\t\t\t===== Update account =====\n");
+                printf("Enter new country (current: %s): ", r.country);
+                fgets(r.country, sizeof(r.country), stdin);
+                r.country[strcspn(r.country, "\n")] = 0;
+                if (!isValidCountry(r.country) || r.country[0] == '\0') {
+                    printf("Invalid country name! Use only letters, hyphens, apostrophes, and periods (2–50 chars).\n");
+                    sleep(2);
+                    continue;
+                }
+
+            } while (!isValidCountry(r.country));
+
 
             // Update phone with validation
             char phoneStr[20];
