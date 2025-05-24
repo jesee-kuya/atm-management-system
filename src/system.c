@@ -21,6 +21,31 @@ int getAccountFromFile(FILE *ptr, char name[50], struct Record *r) {
                   r->accountType) != EOF;
 }
 
+int accountNumberExists(FILE *ptr, int accountNbr) {
+    struct Record temp;
+    char tempName[50];
+
+    while (fscanf(ptr, "%d %d %49s %d %d/%d/%d %49s %d %lf %9s",
+                  &temp.id,
+                  &temp.userId,
+                  tempName,
+                  &temp.accountNbr,
+                  &temp.deposit.month,
+                  &temp.deposit.day,
+                  &temp.deposit.year,
+                  temp.country,
+                  &temp.phone,
+                  &temp.amount,
+                  temp.accountType) != EOF) {
+
+        if (temp.accountNbr == accountNbr) {
+            return 1; // Account number found
+        }
+    }
+
+    return 0; // Not found
+}
+
 void saveAccountToFile(FILE *ptr, struct User *u, struct Record *r) {
     fprintf(ptr, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n",
             r->id,
