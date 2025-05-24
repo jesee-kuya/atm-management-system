@@ -557,10 +557,26 @@ void removeAccount(struct User u) {
     system("clear");
     printf("\t\t\t===== Remove account =====\n");
 
-    char accInput[20], newUser[50];
+    char accInput[20];
     int accNumber;
+
     printf("Enter account number: ");
-    fgets(accInput, sizeof(accInput), stdin);
+    if (!fgets(accInput, sizeof(accInput), stdin)) {
+        printf("Error reading input.\n");
+        sleep(2);
+        return;
+    }
+
+    // Remove newline
+    accInput[strcspn(accInput, "\n")] = 0;
+
+    // Validate: non-empty and all digits
+    if (strlen(accInput) == 0 || strspn(accInput, "0123456789") != strlen(accInput)) {
+        printf("Invalid account number! Must be digits only.\n");
+        sleep(2);
+        return;
+    }
+
     accNumber = atoi(accInput);
 
     FILE *pf = fopen(RECORDS, "r");
@@ -568,6 +584,7 @@ void removeAccount(struct User u) {
         perror("Failed to open records file");
         exit(EXIT_FAILURE);
     }
+
     FILE *tmp = fopen("temp.txt", "w");
     if (!tmp) {
         perror("Failed to open temporary file");
@@ -582,10 +599,12 @@ void removeAccount(struct User u) {
     while (getAccountFromFile(pf, user, &r)) {
         if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
             found = 1;
+            // Do not write this account to temp file
         } else {
             saveAccountToFile(tmp, &u, &r);
         }
     }
+
     fclose(pf);
     fclose(tmp);
 
@@ -597,6 +616,8 @@ void removeAccount(struct User u) {
         remove("temp.txt");
         printf("Account not found.\n");
     }
+
+    sleep(2);  // Optional delay to show message
     stayOrReturn(1, removeAccount, u);
 }
 
