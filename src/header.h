@@ -47,6 +47,8 @@ void makeTransaction(struct User u);
 void removeAccount(struct User u);
 void transferOwner(struct User u);
 void ensureRecordsFileExists();
+int getAccountFromFile(FILE *ptr, char name[50], struct Record *r);
+int accountNumberExists(FILE *ptr, int accountNbr);
 
 // Validation functions
 int isValidDate(int month, int day, int year);
