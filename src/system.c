@@ -135,7 +135,7 @@ void createNewAcc(struct User u) {
                 // Flush excess characters from input buffer
                 int c;
                 while ((c = getchar()) != '\n' && c != EOF);
-                printf("Input too long! Please try again.\n");
+                printf("Invalid date format! Use mm/dd/yyyy with no extra characters.\n");
                 sleep(2);
                 continue;
             }
@@ -273,7 +273,7 @@ void createNewAcc(struct User u) {
                 // Flush excess characters from input buffer
                 int c;
                 while ((c = getchar()) != '\n' && c != EOF);
-                printf("Input too long! Please try again.\n");
+                printf("Invalid account type! Choose from: saving, current, fixed01, fixed02, fixed03\n");
                 sleep(2);
                 continue;
             }
