@@ -396,7 +396,7 @@ void updateAccount(struct User u) {
     if (found) {
         remove(RECORDS);
         rename("temp.txt", RECORDS);
-        printf("✅ Account updated.\n");
+        printf("Account updated.\n");
     } else {
         remove("temp.txt");
         printf("✖ Account not found.\n");
