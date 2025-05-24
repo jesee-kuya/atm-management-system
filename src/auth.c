@@ -8,14 +8,25 @@ void loginMenu(char a[50], char pass[50]) {
     ensureUsersFileExists();
     struct termios oldt, newt;
     system("clear");
-    printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
-    printf("\n\t\t\t\tв•‘                                  User Login                                        в•‘");
-    printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
-    printf("\n\t\t\t\tEnter username: ");
     do {
-        scanf("%49s", a);
+        sleep(1);
+        system("clear");
+        printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
+        printf("\n\t\t\t\tв•‘                                  User Login                                        в•‘");
+        printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
+        printf("\t\t\t\tEnter username: ");
+        if (fgets(a, 50, stdin) == NULL) {
+            printf("Error reading input.\n");
+            return;
+        }
+
+        size_t len = strlen(a);
+        if (len > 0 && a[len - 1] == '\n') {
+            a[len - 1] = '\0';
+        }
+
         if (!isValidName(a)) {
-            printf("Invalid username! Use only alphanumeric, _ and - (3-49 chars): ");
+            printf("\t\t\t\tInvalid username! Use only alphanumeric, _ and - (3 - 49 chars): ");
         }
     } while (!isValidName(a));
 
