@@ -70,18 +70,22 @@ void registerMenu(char a[50], char pass[50]) {
 
     newUser.id = maxId + 1;
 
-    system("clear");
-    printf("\n\n\t\t\t\tRegistration\n");
+   
 
     // Username input with validation and existence check
     int usernameTaken;
     char buffer[100];
 
     do {
+        system("clear");
+        printf("\n\n\t\t\t\tв•”в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•—");
+        printf("\n\t\t\t\tв•‘                                   Register                                         в•‘");
+        printf("\n\t\t\t\tв•љв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ќ\n");
         usernameTaken = 0;
         printf("\n\t\t\t\tEnter username: ");
         if (!fgets(buffer, sizeof(buffer), stdin)) {
             printf("\t\t\t\tError reading input!\n");
+            sleep(2);
             continue;
         }
 
@@ -89,6 +93,7 @@ void registerMenu(char a[50], char pass[50]) {
 
         if (!isValidName(buffer)) {
             printf("\t\t\t\tInvalid username! Use only alphanumeric, _ and - (3–49 chars)\n");
+            sleep(2);
             continue;
         }
 
@@ -105,6 +110,7 @@ void registerMenu(char a[50], char pass[50]) {
             if (strcmp(temp.name, newUser.name) == 0) {
                 usernameTaken = 1;
                 printf("\t\t\t\tUsername already exists! Try another one.\n");
+                sleep(2);
                 break;
             }
         }
