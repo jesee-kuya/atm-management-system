@@ -497,9 +497,12 @@ void makeTransaction(struct User u) {
     fgets(choiceInput, sizeof(choiceInput), stdin);
     choice = atoi(choiceInput);
 
-    printf("Enter amount: ");
-    fgets(amountInput, sizeof(amountInput), stdin);
-    amount = atof(amountInput);
+    do {
+        printf("Enter amount: ");
+        fgets(amountInput, sizeof(amountInput), stdin);
+        amount = atof(amountInput);
+
+    } while(!isValidAmount(amount));
 
     FILE *pf = fopen(RECORDS, "r");
     if (!pf) {
