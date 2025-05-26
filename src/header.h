@@ -58,5 +58,5 @@ int isValidAccountType(const char *type);
 int isValidName(const char *name);
 int isValidCountry(const char *country);
 void trimNewline(char *str);
-int isValidPassword(char *password);
+int isValidPassword(const char *password);
 void removeWhitespace(char *str);
