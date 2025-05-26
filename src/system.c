@@ -495,16 +495,16 @@ void checkAccountDetails(struct User u) {
                    r.deposit.month, r.deposit.day, r.deposit.year);
             printf("─────────────────────────────\n");
 
-            if (strcmp("saving", r.accountType) == 1) {
+            if (strcmp("saving", r.accountType) == 0) {
                 double amount = simple_interest(r.amount, 7.0, 1.0);
                 printf("You will get $%.2f as interest on day %02d of every month\n", amount, r.deposit.day);
-            } else if (strcmp("fixed01", r.accountType) == 1) {
+            } else if (strcmp("fixed01", r.accountType) == 0) {
                 double amount = simple_interest(r.amount, 4.0, 1.0);
                 printf("You will get $%.2f as interest on day %02d of every month\n", amount, r.deposit.day);
-            } else if (strcmp("fixed02", r.accountType) == 1) {
+            } else if (strcmp("fixed02", r.accountType) == 0) {
                 double amount = simple_interest(r.amount, 5.0, 2.0);
                 printf("You will get $%.2f as interest on day %02d of every month\n", amount, r.deposit.day);
-            } else if (strcmp("fixed03", r.accountType) == 1) {
+            } else if (strcmp("fixed03", r.accountType) == 0) {
                 double amount = simple_interest(r.amount, 8.0, 3.0);
                 printf("You will get $%.2f as interest on day %02d of every month\n", amount, r.deposit.day);
             } else {
@@ -585,7 +585,7 @@ void makeTransaction(struct User u) {
             }
         }
 
-        if (strcmp("fixed01", r.accountType) == 1|| strcmp("fixed02", r.accountType) == 1 || strcmp("fixed03", r.accountType) == 1 ) {
+        if (strcmp("fixed01", r.accountType) == 0|| strcmp("fixed02", r.accountType) == 0 || strcmp("fixed03", r.accountType) == 0 ) {
             printf("✖ Cannot make transactions on fixed accounts.\n");
             fclose(pf);
             fclose(tmp);
