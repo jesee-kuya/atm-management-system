@@ -756,3 +756,7 @@ void ensureRecordsFileExists() {
     }
     fclose(fp);
 }
+
+double simple_interest(double principal, double rate, double time) {
+    return (principal * rate * time) / 100.0;
+}
