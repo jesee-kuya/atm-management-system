@@ -570,6 +570,15 @@ void makeTransaction(struct User u) {
                 }
             }
         }
+
+        if (strcmp("fixed01", r.accountType) == 1|| strcmp("fixed02", r.accountType) == 1 || strcmp("fixed03", r.accountType) == 1 ) {
+            printf("✖ Cannot make transactions on fixed accounts.\n");
+            fclose(pf);
+            fclose(tmp);
+            remove("temp.txt");
+            stayOrReturn(1, makeTransaction, u);
+            return;
+        }
         saveAccountToFile(tmp, &u, &r);
     }
 
