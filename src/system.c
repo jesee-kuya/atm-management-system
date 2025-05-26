@@ -494,8 +494,26 @@ void checkAccountDetails(struct User u) {
             printf(" Date Created   : %02d/%02d/%d\n",
                    r.deposit.month, r.deposit.day, r.deposit.year);
             printf("─────────────────────────────\n");
+
+            if (strcmp("saving", r.accountType) == 1) {
+                double amount = simple_interest(r.amount, 7.0, 1.0);
+                printf("You will get $%.2f as interest on day %02d of every month\n", amount, r.deposit.day);
+            } else if (strcmp("fixed01", r.accountType) == 1) {
+                double amount = simple_interest(r.amount, 4.0, 1.0);
+                printf("You will get $%.2f as interest on day %02d of every month\n", amount, r.deposit.day);
+            } else if (strcmp("fixed02", r.accountType) == 1) {
+                double amount = simple_interest(r.amount, 5.0, 2.0);
+                printf("You will get $%.2f as interest on day %02d of every month\n", amount, r.deposit.day);
+            } else if (strcmp("fixed03", r.accountType) == 1) {
+                double amount = simple_interest(r.amount, 8.0, 3.0);
+                printf("You will get $%.2f as interest on day %02d of every month\n", amount, r.deposit.day);
+            } else {
+                printf("You will not get interests because the account is of type current");
+            }
+
             break;
         }
+        
     }
 
     fclose(pf);
