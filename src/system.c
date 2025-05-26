@@ -59,38 +59,67 @@ void saveAccountToFile(FILE *ptr, struct User *u, struct Record *r) {
 }
 
 void stayOrReturn(int notGood, void f(struct User u), struct User u) {
-    char input[10];
-    int option;
+    char input[20];
+    char *endptr;
+    long option;
+
     if (notGood == 0) {
         system("clear");
         printf("\n✖ Record not found!!\n");
-    invalid:
-        printf("\nEnter 0 to try again, 1 to return to main menu and 2 to exit:");
-        fgets(input, sizeof(input), stdin);
-        option = atoi(input);
-        if (option == 0)
-            f(u);
-        else if (option == 1)
-            mainMenu(u);
-        else if (option == 2)
-            exit(0);
-        else {
-            printf("Insert a valid operation!\n");
-            goto invalid;
+
+        while (1) {
+            printf("\nEnter 0 to try again, 1 to return to main menu, or 2 to exit: ");
+            fgets(input, sizeof(input), stdin);
+            errno = 0;
+            option = strtol(input, &endptr, 10);
+
+            // Check for conversion errors or leftover characters
+            if (errno != 0 || *endptr != '\n') {
+                printf("✖ Invalid option! Please enter a valid number (0, 1, or 2).\n");
+                continue;
+            }
+
+            if (option == 0) {
+                f(u);
+                return;
+            } else if (option == 1) {
+                system("clear");
+                mainMenu(u);
+                return;
+            } else if (option == 2) {
+                system("clear");
+                exit(0);
+            } else {
+                printf("✖ Invalid option! Please enter 0, 1, or 2.\n");
+            }
         }
+
     } else {
-        printf("\nEnter 1 to go to the main menu and 0 to exit:");
-        fgets(input, sizeof(input), stdin);
-        option = atoi(input);
-    }
-    if (option == 1) {
-        system("clear");
-        mainMenu(u);
-    } else {
-        system("clear");
-        exit(1);
+        while (1) {
+            printf("\nEnter 1 to go to the main menu or 0 to exit: ");
+            fgets(input, sizeof(input), stdin);
+            errno = 0;
+            option = strtol(input, &endptr, 10);
+
+            if (errno != 0 || *endptr != '\n') {
+                printf("✖ Invalid option! Please enter a valid number (0 or 1).\n");
+                continue;
+            }
+
+            if (option == 1) {
+                system("clear");
+                mainMenu(u);
+                return;
+            } else if (option == 0) {
+                system("clear");
+                exit(1);
+            } else {
+                printf("✖ Invalid option! Please enter 0 or 1.\n");
+            }
+        }
     }
 }
+
 
 void success(struct User u) {
     char input[10];
