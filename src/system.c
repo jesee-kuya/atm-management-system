@@ -530,7 +530,6 @@ void makeTransaction(struct User u) {
     system("clear");
     printf("\t\t\t===== Make a transaction =====\n");
 
-    ensureRecordsFileExists();
     char accInput[20], choiceInput[10], amountInput[20];
     int accNumber, choice;
     double amount;
@@ -547,14 +546,14 @@ void makeTransaction(struct User u) {
         printf("Enter amount: ");
         fgets(amountInput, sizeof(amountInput), stdin);
         amount = atof(amountInput);
-
-    } while(!isValidAmount(amount));
+    } while (!isValidAmount(amount));
 
     FILE *pf = fopen(RECORDS, "r");
     if (!pf) {
         perror("Failed to open records file");
         exit(EXIT_FAILURE);
     }
+
     FILE *tmp = fopen("temp.txt", "w");
     if (!tmp) {
         perror("Failed to open temporary file");
@@ -568,14 +567,25 @@ void makeTransaction(struct User u) {
 
     while (getAccountFromFile(pf, user, &r)) {
         if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
+            // Check for fixed account types before modifying
+            if (strcmp(r.accountType, "fixed01") == 0 || strcmp(r.accountType, "fixed02") == 0 || strcmp(r.accountType, "fixed03") == 0) {
+                printf("✖ Cannot make transactions on fixed accounts.\n");
+                fclose(pf);
+                fclose(tmp);
+                remove("temp.txt");
+                stayOrReturn(1, makeTransaction, u);
+                return;
+            }
+
             found = 1;
+
             if (choice == 1) {
                 r.amount += amount;
             } else if (choice == 2) {
                 if (r.amount >= amount) {
                     r.amount -= amount;
                 } else {
-                    printf("Insufficient funds.\n");
+                    printf("✖ Insufficient funds. Available balance: $%.2f\n", r.amount);
                     fclose(pf);
                     fclose(tmp);
                     remove("temp.txt");
@@ -585,14 +595,6 @@ void makeTransaction(struct User u) {
             }
         }
 
-        if (strcmp("fixed01", r.accountType) == 0|| strcmp("fixed02", r.accountType) == 0 || strcmp("fixed03", r.accountType) == 0 ) {
-            printf("✖ Cannot make transactions on fixed accounts.\n");
-            fclose(pf);
-            fclose(tmp);
-            remove("temp.txt");
-            stayOrReturn(1, makeTransaction, u);
-            return;
-        }
         saveAccountToFile(tmp, &u, &r);
     }
 
@@ -602,12 +604,13 @@ void makeTransaction(struct User u) {
     if (found) {
         remove(RECORDS);
         rename("temp.txt", RECORDS);
-        printf("Transaction successful.\n");
+        printf("✓ Transaction successful.\n");
     } else {
         remove("temp.txt");
-        printf("Account not found.\n");
+        printf("✖ Account not found.\n");
     }
-    stayOrReturn(1,  makeTransaction, u);
+
+    stayOrReturn(1, makeTransaction, u);
 }
 
 void removeAccount(struct User u) {
