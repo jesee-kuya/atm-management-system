@@ -120,7 +120,6 @@ void stayOrReturn(int notGood, void f(struct User u), struct User u) {
     }
 }
 
-
 void success(struct User u) {
     char input[10];
     int option;
@@ -391,7 +390,7 @@ void checkAllAccounts(struct User u) {
 void updateAccount(struct User u) {
     ensureRecordsFileExists();
     system("clear");
-    printf("\t\t\t===== Update account =====\n");
+    printf("\t\t\t===== Update Account =====\n");
 
     char accInput[20];
     int accNumber;
@@ -421,46 +420,57 @@ void updateAccount(struct User u) {
         if (strcmp(user, u.name) == 0 && r.accountNbr == accNumber) {
             found = 1;
 
-            char country[100];
-            strcpy(country, r.country);
-
-            do {
+            int choice = -1;
+            char input[10];
+            while (choice != 1 && choice != 2) {
                 system("clear");
-                printf("\t\t\t===== Update account =====\n");
-                printf("Enter new country (current: %s): ", country);
-                fgets(r.country, sizeof(r.country), stdin);
-                r.country[strcspn(r.country, "\n")] = 0;
-                if (!isValidCountry(r.country) || r.country[0] == '\0') {
-                    printf("Invalid country name! Use only letters, hyphens, apostrophes, and periods (2–50 chars).\n");
+                printf("\t\t\t===== Update Account =====\n");
+                printf("1. Update Country\n");
+                printf("2. Update Phone\n");
+                printf("Choose an option: ");
+                fgets(input, sizeof(input), stdin);
+                choice = atoi(input);
+                if (choice != 1 && choice != 2) {
+                    printf("✖ Invalid option. Please enter 1 or 2.\n");
                     sleep(2);
-                    continue;
                 }
+            }
 
-            } while (!isValidCountry(r.country));
+            if (choice == 1) {
+                char country[100];
+                do {
+                    system("clear");
+                    printf("\t\t\t===== Update Country =====\n");
+                    printf("Enter new country (current: %s): ", r.country);
+                    fgets(country, sizeof(country), stdin);
+                    country[strcspn(country, "\n")] = 0;
 
+                    if (!isValidCountry(country) || country[0] == '\0') {
+                        printf("✖ Invalid country name! Use only letters, hyphens, apostrophes, and periods (2–50 chars).\n");
+                        sleep(2);
+                    }
+                } while (!isValidCountry(country));
+                strcpy(r.country, country);
 
-            // Update phone with validation
-            char phoneStr[20];
-            int phone = r.phone;
-            
-            do {
-                system("clear");
-                printf("\t\t\t===== Update account =====\n");
-                printf("Enter new phone (current: %d): ", phone);
-                fgets(phoneStr, sizeof(phoneStr), stdin);
-                phoneStr[strcspn(phoneStr, "\n")] = 0;
+            } else if (choice == 2) {
+                char phoneStr[20];
+                do {
+                    system("clear");
+                    printf("\t\t\t===== Update Phone =====\n");
+                    printf("Enter new phone number (current: %d): ", r.phone);
+                    fgets(phoneStr, sizeof(phoneStr), stdin);
+                    phoneStr[strcspn(phoneStr, "\n")] = 0;
 
-                if (!isValidPhone(phoneStr)) {
-                    printf("You entered: %s\n", phoneStr);
-                    printf("Invalid phone number! Use digits only (8–15 characters).\n");
-                    sleep(2);
-                    continue;
-                }
-            } while (!isValidPhone(phoneStr));
-            r.phone = atoi(phoneStr);
+                    if (!isValidPhone(phoneStr)) {
+                        printf("✖ Invalid phone number! Use digits only (8–15 characters).\n");
+                        sleep(2);
+                    }
+                } while (!isValidPhone(phoneStr));
+                r.phone = atoi(phoneStr);
+            }
         }
 
-        // Save record with correct username
+        // Save the (possibly updated) record
         struct User tempUser = {.id = r.userId};
         strcpy(tempUser.name, user);
         saveAccountToFile(tmp, &tempUser, &r);
@@ -472,7 +482,7 @@ void updateAccount(struct User u) {
     if (found) {
         remove(RECORDS);
         rename("temp.txt", RECORDS);
-        printf("Account updated.\n");
+        printf("✓ Account updated.\n");
     } else {
         remove("temp.txt");
         printf("✖ Account not found.\n");
